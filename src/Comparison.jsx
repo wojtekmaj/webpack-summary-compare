@@ -15,7 +15,7 @@ const trimLines = lines => lines.map(line => line.trim());
 
 const getTableHeaderLine = lines => lines.find(line => /\s*Asset\s*/.test(line));
 
-const getChunkTable = (value) => {
+const getAssetsTable = (value) => {
   const lines = getLines(value);
   const trimmedLines = trimLines(lines);
   const tableHeaderLine = getTableHeaderLine(lines);
@@ -25,13 +25,13 @@ const getChunkTable = (value) => {
   return lines.slice(tableHeaderLineIndex, tableEndLineIndex).join('\n');
 };
 
-const getParsedChunkTable = (value) => {
+const getParsedAssetsTable = (value) => {
   if (!value) {
     return null;
   }
 
-  const chunkTable = getChunkTable(value);
-  return parseTable(chunkTable);
+  const assetsTable = getAssetsTable(value);
+  return parseTable(assetsTable);
 };
 
 const unescape = (html) => {
@@ -42,8 +42,8 @@ const unescape = (html) => {
 
 export default class Comparison extends Component {
   static getDerivedStateFromProps(nextProps) {
-    const leftData = getParsedChunkTable(nextProps.left);
-    const rightData = getParsedChunkTable(nextProps.right);
+    const leftData = getParsedAssetsTable(nextProps.left);
+    const rightData = getParsedAssetsTable(nextProps.right);
 
     return {
       leftData,
@@ -90,30 +90,36 @@ export default class Comparison extends Component {
   }
 
   // eslint-disable-next-line
-  renderChunk(chunk) {
+  renderAsset(asset) {
+    if (!asset.Asset || !asset.Size) {
+      // eslint-disable-next-line
+      console.warn('Invalid asset:', asset);
+      return null;
+    }
+
     return (
       <>
-        * **{chunk.Asset}**:
+        * **{asset.Asset}**:
         {' '}
         {<Diff
-          size={chunk.Size}
-          newSize={chunk.newSize}
-        /> || chunk.Size}
+          size={asset.Size}
+          newSize={asset.newSize}
+        /> || asset.Size}
         {'\n'}
       </>
     );
   }
 
   // eslint-disable-next-line
-  renderSection(title, chunks) {
-    if (!chunks || !chunks.length) {
+  renderSection(title, assets) {
+    if (!assets || !assets.length) {
       return null;
     }
 
     return (
       <>
         ## {title}{'\n'}
-        {chunks.map(this.renderChunk)}
+        {assets.map(this.renderAsset)}
         {'\n'}
       </>
     );
@@ -126,8 +132,9 @@ export default class Comparison extends Component {
       return null;
     }
 
-    const size = leftData.reduce((sum, chunk) => sum + parseSize(chunk.Size), 0);
-    const newSize = rightData.reduce((sum, chunk) => sum + parseSize(chunk.Size), 0);
+    const sumSizes = (sum, asset) => sum + parseSize(asset.Size);
+    const size = leftData.reduce(sumSizes, 0);
+    const newSize = rightData.reduce(sumSizes, 0);
 
     return (
       <>
