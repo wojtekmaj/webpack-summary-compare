@@ -1,0 +1,25 @@
+.Comparison {
+  display: grid;
+  grid-column-gap: 10px;
+  grid-template-columns: repeat(2, minmax(400px, 1fr));
+
+  h4 {
+    margin-top: 0;
+  }
+
+  & > div {
+    &:first-child {
+      grid-column-start: 1;
+      grid-column-end: -1;
+    }
+  }
+
+  &__source {
+    display: flex;
+    flex-direction: column;
+
+    textarea {
+      flex-grow: 1;
+    }
+  }
+}

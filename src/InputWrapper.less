@@ -1,0 +1,24 @@
+.InputWrapper {
+  display: grid;
+  grid-column-gap: 10px;
+  grid-template-columns: repeat(2, minmax(400px, 1fr));
+
+  & > * {
+    flex-shrink: 0;
+  }
+
+  h3 {
+    width: 100%;
+  }
+
+  h4 {
+    margin-top: 0;
+  }
+
+  & > div {
+    &:first-child {
+      grid-column-start: 1;
+      grid-column-end: -1;
+    }
+  }
+}
