@@ -147,9 +147,9 @@ export default class Comparison extends Component {
 
     return (
       <>
-        {this.renderSection('New assets', newAssets)}
-        {this.renderSection('Removed assets', removedAssets)}
-        {this.renderSection('Changed assets', changedAssets)}
+        {this.renderSection('✨ New assets', newAssets)}
+        {this.renderSection('🗑️ Removed assets', removedAssets)}
+        {this.renderSection('✏️ Changed assets', changedAssets)}
         {this.renderSummary()}
       </>
     );
