@@ -17,6 +17,10 @@ const Diff = ({ size, newSize }) => {
   const diff = parsedNewSize - parsedSize;
   const diffPercent = ((parsedNewSize / parsedSize) * 100) - 100;
 
+  if (!diff) {
+    return format(parsedSize);
+  }
+
   const risen = diff > 0;
 
   return `${
