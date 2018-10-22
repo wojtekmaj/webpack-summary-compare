@@ -15,11 +15,11 @@ Entrypoint another = another.bundle.js`;
 Version: webpack 4.20.2
 Time: 10000ms
 Built at: 19.10.2018 13:24:53
-            Asset     Size   Chunks             Chunk Names
-another.bundle.js  440 KiB  another  [emitted]  another
- newone.bundle.js   90 KiB  another  [emitted]  another
-  index.bundle.js  550 KiB    index  [emitted]  index
-  child.bundle.js  140 KiB    index  [emitted]  index
+            Asset      Size   Chunks             Chunk Names
+another.bundle.js   440 KiB  another  [emitted]  another
+ newone.bundle.js  90.1 KiB  another  [emitted]  another
+  index.bundle.js   550 KiB    index  [emitted]  index
+  child.bundle.js   140 KiB    index  [emitted]  index
 Entrypoint index = index.bundle.js
 Entrypoint another = another.bundle.js`;
 }

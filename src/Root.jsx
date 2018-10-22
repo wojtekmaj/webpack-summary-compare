@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 
 import './InputWrapper.less';
 
-import Input from './Input';
 import Comparison from './Comparison';
+import InputWrapper from './InputWrapper';
 
 export default class Root extends Component {
   state = {
@@ -21,14 +21,7 @@ export default class Root extends Component {
       <>
         <h1>Webpack summary compare</h1>
         <main>
-          <div className="InputWrapper">
-            <div>
-              <h3>Input</h3>
-              <p>Paste Webpack outputs here.</p>
-            </div>
-            <Input id="left" label="Left" onChange={this.onChangeLeft} />
-            <Input id="right" label="Right" onChange={this.onChangeRight} />
-          </div>
+          <InputWrapper onChangeLeft={this.onChangeLeft} onChangeRight={this.onChangeRight} />
           <Comparison left={left} right={right} />
         </main>
       </>

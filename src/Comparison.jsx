@@ -4,8 +4,10 @@ import ReactMarkdown from 'react-markdown';
 
 import './Comparison.less';
 
+import Diff from './Diff';
+
 import parseTable from './parse_ascii_table';
-import { addUnit, parseSize } from './units';
+import { parseSize } from './units';
 
 const getLines = value => value.split('\n').filter(Boolean);
 
@@ -38,44 +40,10 @@ const unescape = (html) => {
   return el.value;
 };
 
-const Diff = ({ size, newSize }) => {
-  const parsedSize = parseSize(size);
-
-  const format = (num) => {
-    const [diffValue, diffUnit] = addUnit(num);
-    return [diffValue.toFixed(2), ' ', diffUnit];
-  };
-
-  if (!newSize) {
-    return format(parsedSize);
-  }
-
-  const parsedNewSize = parseSize(newSize);
-
-  const diff = parsedNewSize - parsedSize;
-  const diffPercent = ((parsedNewSize / parsedSize) * 100) - 100;
-
-  const risen = diff > 0;
-
-  return (
-    <>
-      {format(parsedSize)}
-      {' '}
-      →
-      {' '}
-      {format(parsedNewSize)}
-      {' '}
-      ({format(diff)}; {diffPercent.toFixed(2)}% {risen ? '⬈' : '⬊'})
-    </>
-  );
-};
-
 export default class Comparison extends Component {
   static getDerivedStateFromProps(nextProps) {
     const leftData = getParsedChunkTable(nextProps.left);
     const rightData = getParsedChunkTable(nextProps.right);
-
-    console.log(leftData, rightData);
 
     return {
       leftData,
@@ -192,13 +160,13 @@ export default class Comparison extends Component {
     const textSource = renderToStaticMarkup(source);
 
     return (
-      <div className="Comparison">
+      <section className="Comparison">
         <div>
-          <h3>Comparison</h3>
+          <h2>Comparison</h2>
           <p>Copy &amp; paste this to Pull Request description.</p>
         </div>
         <div className="Comparison__source">
-          <h4>Source</h4>
+          <h3>Source</h3>
           <textarea
             onFocus={(event) => {
               event.target.select();
@@ -212,10 +180,10 @@ export default class Comparison extends Component {
           />
         </div>
         <div className="Comparison__preview">
-          <h4>Preview</h4>
+          <h3>Preview</h3>
           <ReactMarkdown source={textSource} />
         </div>
-      </div>
+      </section>
     );
   }
 }

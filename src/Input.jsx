@@ -55,7 +55,9 @@ export default class Input extends Component {
 
     return (
       <div className="Input">
-        <h4><label htmlFor={id}>{label}</label></h4>
+        <h3>
+          <label htmlFor={id}>{label}</label>
+        </h3>
         <textarea
           id={id}
           value={value}

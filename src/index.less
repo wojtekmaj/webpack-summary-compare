@@ -9,10 +9,7 @@ html {
     "Segoe UI",
     Helvetica,
     Arial,
-    sans-serif,
-    "Apple Color Emoji",
-    "Segoe UI Emoji",
-    "Segoe UI Symbol";
+    sans-serif;
   line-height: 1.5;
 }
 
@@ -44,4 +41,14 @@ textarea {
   border: 1px solid darkgray;
   border-radius: 4px;
   padding: 6px;
+}
+
+section {
+  display: grid;
+  grid-column-gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+
+  @media screen and (min-width: 1000px) {
+    grid-template-columns: repeat(2, minmax(400px, 1fr));
+  }
 }
