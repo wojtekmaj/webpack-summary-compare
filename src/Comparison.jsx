@@ -20,9 +20,12 @@ const getAssetsTable = (value) => {
   const trimmedLines = trimLines(lines);
   const tableHeaderLine = getTableHeaderLine(lines);
   const tableHeaderLineIndex = lines.indexOf(tableHeaderLine);
-  const tableEndLineIndex = trimmedLines.findIndex(line => line.startsWith('Entrypoint'));
+  let tableEndLineIndex = trimmedLines.slice(tableHeaderLineIndex + 1).findIndex(line => line.startsWith('Entrypoint'));
+  if (tableEndLineIndex === -1) {
+    tableEndLineIndex = trimmedLines.slice(tableHeaderLineIndex + 1).findIndex(line => !line.includes('KiB') && !line.includes('MiB'));
+  }
 
-  return lines.slice(tableHeaderLineIndex, tableEndLineIndex).join('\n');
+  return lines.slice(tableHeaderLineIndex, tableHeaderLineIndex + tableEndLineIndex + 1).join('\n');
 };
 
 const getParsedAssetsTable = (value) => {
