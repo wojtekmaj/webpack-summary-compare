@@ -2,6 +2,10 @@ const KiB = 1024;
 const MiB = KiB * 1024;
 
 export const parseSize = (sizeString) => {
+  if (typeof sizeString === 'undefined') {
+    return undefined;
+  }
+
   if (typeof sizeString === 'number') {
     return sizeString;
   }
