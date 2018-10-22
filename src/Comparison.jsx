@@ -21,8 +21,13 @@ const getAssetsTable = (value) => {
   const tableHeaderLine = getTableHeaderLine(lines);
   const tableHeaderLineIndex = lines.indexOf(tableHeaderLine);
   let tableEndLineIndex = trimmedLines.slice(tableHeaderLineIndex + 1).findIndex(line => line.startsWith('Entrypoint'));
+  // No "Entrypoint" output included
   if (tableEndLineIndex === -1) {
     tableEndLineIndex = trimmedLines.slice(tableHeaderLineIndex + 1).findIndex(line => !line.includes('KiB') && !line.includes('MiB'));
+  }
+  // No lines after assets table
+  if (tableEndLineIndex === -1) {
+    tableEndLineIndex = trimmedLines.slice(tableHeaderLineIndex + 1).length;
   }
 
   return lines.slice(tableHeaderLineIndex, tableHeaderLineIndex + tableEndLineIndex + 1).join('\n');
