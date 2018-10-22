@@ -20,14 +20,15 @@ const getAssetsTable = (value) => {
   const trimmedLines = trimLines(lines);
   const tableHeaderLine = getTableHeaderLine(lines);
   const tableHeaderLineIndex = lines.indexOf(tableHeaderLine);
-  let tableEndLineIndex = trimmedLines.slice(tableHeaderLineIndex + 1).findIndex(line => line.startsWith('Entrypoint'));
+  const linesStartingFromTableContent = trimmedLines.slice(tableHeaderLineIndex + 1);
+  let tableEndLineIndex = linesStartingFromTableContent.findIndex(line => line.startsWith('Entrypoint'));
   // No "Entrypoint" output included
   if (tableEndLineIndex === -1) {
-    tableEndLineIndex = trimmedLines.slice(tableHeaderLineIndex + 1).findIndex(line => !line.includes('KiB') && !line.includes('MiB'));
+    tableEndLineIndex = linesStartingFromTableContent.findIndex(line => !line.includes('KiB') && !line.includes('MiB'));
   }
   // No lines after assets table
   if (tableEndLineIndex === -1) {
-    tableEndLineIndex = trimmedLines.slice(tableHeaderLineIndex + 1).length;
+    tableEndLineIndex = linesStartingFromTableContent.length;
   }
 
   return lines.slice(tableHeaderLineIndex, tableHeaderLineIndex + tableEndLineIndex + 1).join('\n');
