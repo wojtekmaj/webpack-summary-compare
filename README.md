@@ -25,7 +25,7 @@ Entrypoint another = another.bundle.js
 ```
 Hash: c926516bc19d8d5e9e4a
 Version: webpack 4.20.2
-Time: 10000ms
+Time: 9870ms
 Built at: 19.10.2018 13:24:53
                                  Asset      Size   Chunks             Chunk Names
 another.bundle-c926516bc19d8d5e9e4a.js   440 KiB  another  [emitted]  another
@@ -57,6 +57,8 @@ Entrypoint another = another.bundle.js
 
 ## Summary
 **Total size**: 1.89 MiB → 1.19 MiB (-714.9 KiB; -36.95% ↘)
+
+**Time**: 10000 ms → 9870 ms (-130 ms; -1.30% ↘)
 ```
 
 ## License
