@@ -48,7 +48,7 @@ const getHash = (value) => {
   return hashLine.slice(hashLabel.length);
 };
 
-const removeHash = (name, hash) => {
+const removeHash = (name = '', hash) => {
   if (!hash) {
     return name;
   }
