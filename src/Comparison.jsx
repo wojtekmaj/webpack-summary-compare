@@ -1,6 +1,5 @@
-import React, { Component } from 'react';
+import React, { lazy, Component, Suspense } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import ReactMarkdown from 'react-markdown/with-html';
 
 import './Comparison.less';
 
@@ -9,6 +8,10 @@ import SizeDiff from './SizeDiff';
 
 import parseTable from './parse_ascii_table';
 import { parseSize } from './units';
+
+const ReactMarkdown = lazy(() => new Promise((resolve, reject) => {
+  import('react-markdown/with-html').then(component => resolve({ default: component })).catch(reject);
+}));
 
 const getLines = value => value.split('\n').filter(Boolean);
 
@@ -92,14 +95,16 @@ const unescape = (html) => {
 
 export default class Comparison extends Component {
   static getDerivedStateFromProps(nextProps) {
-    const leftData = {
-      assets: getParsedAssetsTable(nextProps.left),
-      stats: getStatProperties(nextProps.left),
+    const { left, right } = nextProps;
+
+    const leftData = left && {
+      assets: getParsedAssetsTable(left),
+      stats: getStatProperties(left),
     };
 
-    const rightData = {
-      assets: getParsedAssetsTable(nextProps.right),
-      stats: getStatProperties(nextProps.right),
+    const rightData = right && {
+      assets: getParsedAssetsTable(right),
+      stats: getStatProperties(right),
     };
 
     return {
@@ -260,11 +265,13 @@ export default class Comparison extends Component {
         <div className="Comparison__preview">
           <h3>Preview</h3>
           <div className="Comparison__preview__body">
-            <ReactMarkdown
-              // Have to change &shy; into <wbr /> as React-Markdown has issues rendering these
-              source={textSource.replace(/&shy;/g, '<wbr />')}
-              escapeHtml={false}
-            />
+            <Suspense fallback={<p>Loading preview...</p>}>
+              <ReactMarkdown
+                // Have to change &shy; into <wbr /> as React-Markdown has issues rendering these
+                source={textSource.replace(/&shy;/g, '<wbr />')}
+                escapeHtml={false}
+              />
+            </Suspense>
           </div>
         </div>
       </section>
