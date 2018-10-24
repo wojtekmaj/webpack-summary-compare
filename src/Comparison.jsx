@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import ReactMarkdown from 'react-markdown';
+import ReactMarkdown from 'react-markdown/with-html';
 
 import './Comparison.less';
 
@@ -67,7 +67,7 @@ const getParsedAssetsTable = (value) => {
 
   return parsedAssetsTable.map(asset => ({
     ...asset,
-    Asset: removeHash(asset.Asset, hash),
+    Asset: removeHash(asset.Asset, hash).replace(/~/g, '&shy;~'),
   }));
 };
 
@@ -202,9 +202,13 @@ export default class Comparison extends Component {
     );
   }
 
-  render() {
+  getTextSource() {
     const source = this.renderSource();
-    const textSource = renderToStaticMarkup(source);
+    return unescape(renderToStaticMarkup(source));
+  }
+
+  render() {
+    const textSource = this.getTextSource();
 
     return (
       <section className="Comparison">
@@ -218,13 +222,17 @@ export default class Comparison extends Component {
             onFocus={(event) => {
               event.target.select();
             }}
-            value={unescape(textSource)}
+            value={textSource}
           />
         </div>
         <div className="Comparison__preview">
           <h3>Preview</h3>
           <div className="Comparison__preview__body">
-            <ReactMarkdown source={textSource} />
+            <ReactMarkdown
+              // Have to change &shy; into <wbr /> as React-Markdown has issues rendering these
+              source={textSource.replace(/&shy;/g, '<wbr />')}
+              escapeHtml={false}
+            />
           </div>
         </div>
       </section>
