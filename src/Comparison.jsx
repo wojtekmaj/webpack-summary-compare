@@ -154,12 +154,14 @@ export default class Comparison extends Component {
       return null;
     }
 
+    const sortedAssets = assets.sort((a, b) => a.Asset > b.Asset);
+
     return (
       <>
         ## {title}{'\n'}
         | Asset | Size |{'\n'}
         | ----- | ---- |{'\n'}
-        {assets.sort((a, b) => a.Asset > b.Asset).map(this.renderAsset)}
+        {sortedAssets.map(this.renderAsset)}
         {'\n'}
       </>
     );
