@@ -13,6 +13,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "merge-class-names": "^1.1.1",
     "prop-types": "^15.6.2",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
