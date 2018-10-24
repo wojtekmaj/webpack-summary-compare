@@ -132,13 +132,14 @@ export default class Comparison extends Component {
 
     return (
       <>
-        * **{asset.Asset}**:
+        | **{asset.Asset}** |
         {' '}
         {<Diff
           size={asset.Size}
           newSize={asset.newSize}
         /> || asset.Size}
-        {'\n'}
+        {' '}
+        |{'\n'}
       </>
     );
   }
@@ -152,7 +153,9 @@ export default class Comparison extends Component {
     return (
       <>
         ## {title}{'\n'}
-        {assets.map(this.renderAsset)}
+        | Asset | Size |{'\n'}
+        | ----- | ---- |{'\n'}
+        {assets.sort((a, b) => a.Asset > b.Asset).map(this.renderAsset)}
         {'\n'}
       </>
     );
@@ -211,17 +214,14 @@ export default class Comparison extends Component {
             onFocus={(event) => {
               event.target.select();
             }}
-            ref={(ref) => {
-              if (ref) {
-                // eslint-disable-next-line
-                ref.value = unescape(textSource);
-              }
-            }}
+            value={unescape(textSource)}
           />
         </div>
         <div className="Comparison__preview">
           <h3>Preview</h3>
-          <ReactMarkdown source={textSource} />
+          <div className="Comparison__preview__body">
+            <ReactMarkdown source={textSource} />
+          </div>
         </div>
       </section>
     );

@@ -40,14 +40,20 @@ Entrypoint another = another.bundle.js
 
 ```
 ## ✨ New assets
-* **newone.bundle.js**: 90.10 KiB
+| Asset | Size |
+| ----- | ---- |
+| **newone.bundle-\[hash\].js** | 90.10 KiB |
 
 ## 🗑️ Removed assets
-* **removed.bundle.js**: 220.00 KiB
+| Asset | Size |
+| ----- | ---- |
+| **removed.bundle-\[hash\].js** | 220.00 KiB |
 
 ## ✏️ Changed assets
-* **another.bundle.js**: 1.00 MiB → 440.00 KiB (-584.00 KiB; -57.03% ⬊)
-* **child.bundle.js**: 141.00 KiB → 140.00 KiB (-1.00 KiB; -0.71% ⬊)
+| Asset | Size |
+| ----- | ---- |
+| **another.bundle-\[hash\].js** | 1.00 MiB → 440.00 KiB (-584.00 KiB; -57.03% ⬊) |
+| **child.bundle-\[hash\].js** | 141.00 KiB → 140.00 KiB (-1.00 KiB; -0.71% ⬊) |
 
 ## Summary
 **Total size**: 1.89 MiB → 1.19 MiB (-714.90 KiB; -36.95% ⬊)
