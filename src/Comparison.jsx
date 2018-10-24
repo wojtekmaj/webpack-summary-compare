@@ -34,13 +34,37 @@ const getAssetsTable = (value) => {
   return lines.slice(tableHeaderLineIndex, tableHeaderLineIndex + tableEndLineIndex + 1).join('\n');
 };
 
+const getHash = (value) => {
+  const lines = getLines(value);
+  const trimmedLines = trimLines(lines);
+
+  const hashLabel = 'Hash: ';
+  const hashLine = trimmedLines.find(line => line.startsWith(hashLabel));
+
+  return hashLine.slice(hashLabel.length);
+};
+
+const removeHash = (name, hash) => {
+  if (!hash) {
+    return name;
+  }
+
+  return name.replace(hash, '\\[hash\\]');
+};
+
 const getParsedAssetsTable = (value) => {
   if (!value) {
     return null;
   }
 
+  const hash = getHash(value);
   const assetsTable = getAssetsTable(value);
-  return parseTable(assetsTable);
+  const parsedAssetsTable = parseTable(assetsTable);
+
+  return parsedAssetsTable.map(asset => ({
+    ...asset,
+    Asset: removeHash(asset.Asset, hash),
+  }));
 };
 
 const unescape = (html) => {
