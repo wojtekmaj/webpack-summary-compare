@@ -5,7 +5,8 @@ const Diff = ({ size, newSize }) => {
 
   const format = (num) => {
     const [diffValue, diffUnit] = addUnit(num);
-    return `${diffValue.toFixed(2)} ${diffUnit}`;
+    const roundedValue = diffValue.toFixed(2) * 1; // Remove insignificant trailing zeros
+    return `${roundedValue}&nbsp;${diffUnit}`;
   };
 
   if (!newSize) {
