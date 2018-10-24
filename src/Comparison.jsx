@@ -41,6 +41,10 @@ const getHash = (value) => {
   const hashLabel = 'Hash: ';
   const hashLine = trimmedLines.find(line => line.startsWith(hashLabel));
 
+  if (!hashLine) {
+    return null;
+  }
+
   return hashLine.slice(hashLabel.length);
 };
 
