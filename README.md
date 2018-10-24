@@ -11,11 +11,11 @@ Hash: 2f168e1f7de11a759d50
 Version: webpack 4.20.2
 Time: 10000ms
 Built at: 19.10.2018 13:24:53
-            Asset     Size   Chunks             Chunk Names
-another.bundle.js    1 MiB  another  [emitted]  another
-removed.bundle.js  220 KiB  another  [emitted]  another
-  index.bundle.js  550 KiB    index  [emitted]  index
-  child.bundle.js  141 KiB    index  [emitted]  index
+                                 Asset     Size   Chunks             Chunk Names
+another.bundle-2f168e1f7de11a759d50.js    1 MiB  another  [emitted]  another
+removed.bundle-2f168e1f7de11a759d50.js  220 KiB  another  [emitted]  another
+  index.bundle-2f168e1f7de11a759d50.js  550 KiB    index  [emitted]  index
+  child.bundle-2f168e1f7de11a759d50.js  141 KiB    index  [emitted]  index
 Entrypoint index = index.bundle.js
 Entrypoint another = another.bundle.js
 ```
@@ -23,15 +23,15 @@ Entrypoint another = another.bundle.js
 ### Input B
 
 ```
-Hash: 73ef49f087689d980c7e
+Hash: c926516bc19d8d5e9e4a
 Version: webpack 4.20.2
 Time: 10000ms
 Built at: 19.10.2018 13:24:53
-            Asset      Size   Chunks             Chunk Names
-another.bundle.js   440 KiB  another  [emitted]  another
- newone.bundle.js  90.1 KiB  another  [emitted]  another
-  index.bundle.js   550 KiB    index  [emitted]  index
-  child.bundle.js   140 KiB    index  [emitted]  index
+                                 Asset      Size   Chunks             Chunk Names
+another.bundle-c926516bc19d8d5e9e4a.js   440 KiB  another  [emitted]  another
+ newone.bundle-c926516bc19d8d5e9e4a.js  90.1 KiB  another  [emitted]  another
+  index.bundle-c926516bc19d8d5e9e4a.js   550 KiB    index  [emitted]  index
+  child.bundle-c926516bc19d8d5e9e4a.js   140 KiB    index  [emitted]  index
 Entrypoint index = index.bundle.js
 Entrypoint another = another.bundle.js
 ```
@@ -40,17 +40,23 @@ Entrypoint another = another.bundle.js
 
 ```
 ## ✨ New assets
-* **newone.bundle.js**: 90.10 KiB
+| Asset | Size |
+| ----- | ---- |
+| **newone.bundle-\[hash\].js** | 90.1 KiB |
 
 ## 🗑️ Removed assets
-* **removed.bundle.js**: 220.00 KiB
+| Asset | Size |
+| ----- | ---- |
+| **removed.bundle-\[hash\].js** | 220 KiB |
 
 ## ✏️ Changed assets
-* **another.bundle.js**: 1.00 MiB → 440.00 KiB (-584.00 KiB; -57.03% ⬊)
-* **child.bundle.js**: 141.00 KiB → 140.00 KiB (-1.00 KiB; -0.71% ⬊)
+| Asset | Size |
+| ----- | ---- |
+| **another.bundle-\[hash\].js** | 1 MiB → 440 KiB (-584 KiB; -57.03% ↘) |
+| **child.bundle-\[hash\].js** | 141 KiB → 140 KiB (-1 KiB; -0.71% ↘) |
 
 ## Summary
-**Total size**: 1.89 MiB → 1.19 MiB (-714.90 KiB; -36.95% ⬊)
+**Total size**: 1.89 MiB → 1.19 MiB (-714.9 KiB; -36.95% ↘)
 ```
 
 ## License

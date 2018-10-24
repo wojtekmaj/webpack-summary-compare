@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import ReactMarkdown from 'react-markdown';
+import ReactMarkdown from 'react-markdown/with-html';
 
 import './Comparison.less';
 
@@ -34,13 +34,41 @@ const getAssetsTable = (value) => {
   return lines.slice(tableHeaderLineIndex, tableHeaderLineIndex + tableEndLineIndex + 1).join('\n');
 };
 
+const getHash = (value) => {
+  const lines = getLines(value);
+  const trimmedLines = trimLines(lines);
+
+  const hashLabel = 'Hash: ';
+  const hashLine = trimmedLines.find(line => line.startsWith(hashLabel));
+
+  if (!hashLine) {
+    return null;
+  }
+
+  return hashLine.slice(hashLabel.length);
+};
+
+const removeHash = (name, hash) => {
+  if (!hash) {
+    return name;
+  }
+
+  return name.replace(hash, '\\[hash\\]');
+};
+
 const getParsedAssetsTable = (value) => {
   if (!value) {
     return null;
   }
 
+  const hash = getHash(value);
   const assetsTable = getAssetsTable(value);
-  return parseTable(assetsTable);
+  const parsedAssetsTable = parseTable(assetsTable);
+
+  return parsedAssetsTable.map(asset => ({
+    ...asset,
+    Asset: removeHash(asset.Asset, hash).replace(/~/g, '&shy;~'),
+  }));
 };
 
 const unescape = (html) => {
@@ -108,13 +136,14 @@ export default class Comparison extends Component {
 
     return (
       <>
-        * **{asset.Asset}**:
+        | **{asset.Asset}** |
         {' '}
         {<Diff
           size={asset.Size}
           newSize={asset.newSize}
         /> || asset.Size}
-        {'\n'}
+        {' '}
+        |{'\n'}
       </>
     );
   }
@@ -128,7 +157,9 @@ export default class Comparison extends Component {
     return (
       <>
         ## {title}{'\n'}
-        {assets.map(this.renderAsset)}
+        | Asset | Size |{'\n'}
+        | ----- | ---- |{'\n'}
+        {assets.sort((a, b) => a.Asset > b.Asset).map(this.renderAsset)}
         {'\n'}
       </>
     );
@@ -171,9 +202,13 @@ export default class Comparison extends Component {
     );
   }
 
-  render() {
+  getTextSource() {
     const source = this.renderSource();
-    const textSource = renderToStaticMarkup(source);
+    return unescape(renderToStaticMarkup(source));
+  }
+
+  render() {
+    const textSource = this.getTextSource();
 
     return (
       <section className="Comparison">
@@ -187,17 +222,18 @@ export default class Comparison extends Component {
             onFocus={(event) => {
               event.target.select();
             }}
-            ref={(ref) => {
-              if (ref) {
-                // eslint-disable-next-line
-                ref.value = unescape(textSource);
-              }
-            }}
+            value={textSource}
           />
         </div>
         <div className="Comparison__preview">
           <h3>Preview</h3>
-          <ReactMarkdown source={textSource} />
+          <div className="Comparison__preview__body">
+            <ReactMarkdown
+              // Have to change &shy; into <wbr /> as React-Markdown has issues rendering these
+              source={textSource.replace(/&shy;/g, '<wbr />')}
+              escapeHtml={false}
+            />
+          </div>
         </div>
       </section>
     );
