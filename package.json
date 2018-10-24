@@ -5,6 +5,7 @@
   "main": "src/index.html",
   "scripts": {
     "build": "yarn clean && parcel build src/index.html --public-url ./ --cache-dir ./.cache/prod",
+    "clean": "rimraf dist",
     "start": "parcel src/index.html --cache-dir ./.cache/dev"
   },
   "author": {
@@ -28,6 +29,7 @@
     "eslint-plugin-jsx-a11y": "^6.1.1",
     "eslint-plugin-react": "^7.11.1",
     "less": "^3.8.1",
-    "parcel-bundler": "^1.10.3"
+    "parcel-bundler": "^1.10.3",
+    "rimraf": "^2.6.1"
   }
 }
