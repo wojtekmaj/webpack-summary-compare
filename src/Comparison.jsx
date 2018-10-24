@@ -5,6 +5,7 @@ import ReactMarkdown from 'react-markdown/with-html';
 import './Comparison.less';
 
 import Diff from './Diff';
+import SizeDiff from './SizeDiff';
 
 import parseTable from './parse_ascii_table';
 import { parseSize } from './units';
@@ -34,19 +35,25 @@ const getAssetsTable = (value) => {
   return lines.slice(tableHeaderLineIndex, tableHeaderLineIndex + tableEndLineIndex + 1).join('\n');
 };
 
-const getHash = (value) => {
-  const lines = getLines(value);
-  const trimmedLines = trimLines(lines);
-
-  const hashLabel = 'Hash: ';
-  const hashLine = trimmedLines.find(line => line.startsWith(hashLabel));
-
-  if (!hashLine) {
+const getStatProperty = (value, key) => {
+  if (!value) {
     return null;
   }
 
-  return hashLine.slice(hashLabel.length);
+  const lines = getLines(value);
+  const trimmedLines = trimLines(lines);
+
+  const valueLabel = `${key}: `;
+  const valueLine = trimmedLines.find(line => line.startsWith(valueLabel));
+
+  if (!valueLine) {
+    return null;
+  }
+
+  return valueLine.slice(valueLabel.length);
 };
+
+const getHash = value => getStatProperty(value, 'Hash');
 
 const removeHash = (name = '', hash) => {
   if (!hash) {
@@ -58,7 +65,7 @@ const removeHash = (name = '', hash) => {
 
 const getParsedAssetsTable = (value) => {
   if (!value) {
-    return null;
+    return [];
   }
 
   const hash = getHash(value);
@@ -71,6 +78,12 @@ const getParsedAssetsTable = (value) => {
   }));
 };
 
+const getStatProperties = value => ['Hash', 'Version', 'Time', 'Built at']
+  .reduce((result, key) => ({
+    ...result,
+    [key]: getStatProperty(value, key),
+  }), {});
+
 const unescape = (html) => {
   const el = document.createElement('textarea');
   el.innerHTML = html;
@@ -79,8 +92,15 @@ const unescape = (html) => {
 
 export default class Comparison extends Component {
   static getDerivedStateFromProps(nextProps) {
-    const leftData = getParsedAssetsTable(nextProps.left);
-    const rightData = getParsedAssetsTable(nextProps.right);
+    const leftData = {
+      assets: getParsedAssetsTable(nextProps.left),
+      stats: getStatProperties(nextProps.left),
+    };
+
+    const rightData = {
+      assets: getParsedAssetsTable(nextProps.right),
+      stats: getStatProperties(nextProps.right),
+    };
 
     return {
       leftData,
@@ -97,20 +117,20 @@ export default class Comparison extends Component {
       return {};
     }
 
-    const newAssets = rightData
-      .filter(rightEl => !leftData.find(leftEl => leftEl.Asset === rightEl.Asset));
-    const removedAssets = leftData
-      .filter(leftEl => !rightData.find(rightEl => leftEl.Asset === rightEl.Asset));
-    const changedAssets = leftData
+    const newAssets = rightData.assets
+      .filter(rightEl => !leftData.assets.find(leftEl => leftEl.Asset === rightEl.Asset));
+    const removedAssets = leftData.assets
+      .filter(leftEl => !rightData.assets.find(rightEl => leftEl.Asset === rightEl.Asset));
+    const changedAssets = leftData.assets
       .filter((leftElement) => {
-        const rightElement = rightData.find(rightEl => leftElement.Asset === rightEl.Asset);
+        const rightElement = rightData.assets.find(rightEl => leftElement.Asset === rightEl.Asset);
         if (!rightElement) {
           return false;
         }
         return leftElement.Size !== rightElement.Size;
       })
       .map((leftElement) => {
-        const rightElement = rightData.find(rightEl => leftElement.Asset === rightEl.Asset);
+        const rightElement = rightData.assets.find(rightEl => leftElement.Asset === rightEl.Asset);
 
         return {
           Asset: leftElement.Asset,
@@ -138,7 +158,7 @@ export default class Comparison extends Component {
       <>
         | **{asset.Asset}** |
         {' '}
-        {<Diff
+        {<SizeDiff
           size={asset.Size}
           newSize={asset.newSize}
         /> || asset.Size}
@@ -175,17 +195,27 @@ export default class Comparison extends Component {
     }
 
     const sumSizes = (sum, asset) => sum + parseSize(asset.Size);
-    const size = leftData.reduce(sumSizes, 0);
-    const newSize = rightData.reduce(sumSizes, 0);
+    const size = leftData.assets.reduce(sumSizes, 0);
+    const newSize = rightData.assets.reduce(sumSizes, 0);
+    const time = leftData.stats.Time;
+    const newTime = rightData.stats.Time;
 
     return (
       <>
         ## Summary{'\n'}
         **Total size**:
         {' '}
-        <Diff
+        <SizeDiff
           size={size}
           newSize={newSize}
+        />
+        {'\n'}{'\n'}
+        **Time**:
+        {' '}
+        <Diff
+          value={time}
+          newValue={newTime}
+          unit="ms"
         />
       </>
     );

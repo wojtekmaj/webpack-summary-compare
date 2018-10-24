@@ -1,16 +1,19 @@
-const SizeDiff = ({ unit, value, newValue }) => {
-  const parsedSize = parseFloat(value);
+import { addUnit, parseSize } from './units';
 
-  const format = (diffValue) => {
+const SizeDiff = ({ size, newSize }) => {
+  const parsedSize = parseSize(size);
+
+  const format = (num) => {
+    const [diffValue, diffUnit] = addUnit(num);
     const roundedValue = diffValue.toFixed(2) * 1; // Remove insignificant trailing zeros
-    return `${roundedValue}&nbsp;${unit}`;
+    return `${roundedValue}&nbsp;${diffUnit}`;
   };
 
-  if (!newValue) {
+  if (!newSize) {
     return format(parsedSize);
   }
 
-  const parsedNewSize = parseFloat(newValue);
+  const parsedNewSize = parseSize(newSize);
 
   const diff = parsedNewSize - parsedSize;
   const diffPercent = ((parsedNewSize / parsedSize) * 100) - 100;
