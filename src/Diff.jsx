@@ -32,7 +32,7 @@ const Diff = ({ size, newSize }) => {
   }; ${
     diffPercent.toFixed(2)
   }% ${
-    risen ? '⬈' : '⬊'
+    risen ? '↗' : '↘'
   })`;
 };
 
