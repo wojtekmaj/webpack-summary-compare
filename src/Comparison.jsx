@@ -10,14 +10,8 @@ import parseTable from './utils/parse_ascii_table';
 import { parseSize } from './utils/units';
 
 const ReactMarkdown = lazy(() => new Promise((resolve, reject) => {
-  import('react-markdown/with-html')
-    .then((result) => {
-      if (result.default) {
-        resolve(result);
-      } else {
-        resolve({ default: result });
-      }
-    })
+  import('react-markdown')
+    .then(result => resolve(result.default ? result : { default: result }))
     .catch(reject);
 }));
 
