@@ -1,4 +1,4 @@
-import { addUnit, parseSize } from './units';
+import { addUnit, parseSize } from './utils/units';
 
 const SizeDiff = ({ size, newSize }) => {
   const parsedSize = parseSize(size);

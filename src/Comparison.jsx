@@ -6,8 +6,8 @@ import './Comparison.less';
 import Diff from './Diff';
 import SizeDiff from './SizeDiff';
 
-import parseTable from './parse_ascii_table';
-import { parseSize } from './units';
+import parseTable from './utils/parse_ascii_table';
+import { parseSize } from './utils/units';
 
 const ReactMarkdown = lazy(() => new Promise((resolve, reject) => {
   import('react-markdown/with-html').then(component => resolve({ default: component })).catch(reject);
