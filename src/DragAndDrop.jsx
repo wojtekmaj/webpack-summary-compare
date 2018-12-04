@@ -34,7 +34,6 @@ export default class DragAndDrop extends Component {
 
   onDragOver = (event) => {
     if (!this.shouldReact(event)) {
-      console.log('Skipping');
       return;
     }
 
@@ -113,9 +112,7 @@ export default class DragAndDrop extends Component {
           onDragLeave={this.onDragLeave}
           onDrop={this.onDrop}
         >
-          {
-          React.cloneElement(React.Children.only(children))
-        }
+          {React.cloneElement(React.Children.only(children))}
         </div>
       );
     }
