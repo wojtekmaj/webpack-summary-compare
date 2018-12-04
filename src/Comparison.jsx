@@ -201,11 +201,23 @@ export default class Comparison extends Component {
       return null;
     }
 
+    const { assets: leftAssets } = leftData;
+    const { assets: rightAssets } = rightData;
+
     const sumSizes = (sum, asset) => sum + parseSize(asset.Size);
-    const size = leftData.assets.reduce(sumSizes, 0);
-    const newSize = rightData.assets.reduce(sumSizes, 0);
-    const time = leftData.stats.Time;
-    const newTime = rightData.stats.Time;
+    const onlyMaps = asset => asset.Asset.endsWith('.map');
+    const excludeMaps = asset => !onlyMaps(asset);
+
+    const mapsPresent = leftAssets.some(onlyMaps) || rightAssets.some(onlyMaps);
+
+    const size = leftAssets.reduce(sumSizes, 0);
+    const newSize = rightAssets.reduce(sumSizes, 0);
+
+    const sizeNoMap = leftAssets.filter(excludeMaps).reduce(sumSizes, 0);
+    const newSizeNoMap = rightAssets.filter(excludeMaps).reduce(sumSizes, 0);
+
+    const { Time: time } = leftData.stats;
+    const { Time: newTime } = rightData.stats;
 
     return (
       <>
@@ -217,6 +229,17 @@ export default class Comparison extends Component {
           newSize={newSize}
         />
         {'\n'}{'\n'}
+        {mapsPresent && (
+          <>
+            **Total size excl. source maps**:
+            {' '}
+            <SizeDiff
+              size={sizeNoMap}
+              newSize={newSizeNoMap}
+            />
+            {'\n'}{'\n'}
+          </>
+        )}
         **Time**:
         {' '}
         <Diff
