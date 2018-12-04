@@ -112,7 +112,7 @@ export default class DragAndDrop extends Component {
           onDragLeave={this.onDragLeave}
           onDrop={this.onDrop}
         >
-          {React.cloneElement(React.Children.only(children))}
+          {children}
         </div>
       );
     }
