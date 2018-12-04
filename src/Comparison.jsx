@@ -181,7 +181,7 @@ export default class Comparison extends Component {
       return null;
     }
 
-    const sortedAssets = assets.sort((a, b) => a.Asset > b.Asset);
+    const sortedAssets = assets.sort((a, b) => a.Asset.localeCompare(b.Asset));
 
     return (
       <>
