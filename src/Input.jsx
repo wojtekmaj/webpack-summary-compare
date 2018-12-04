@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 import './Input.less';
 
-import getDebugValue from './__debug/getDebugValue';
 import DragAndDrop from './DragAndDrop';
 
 const setRows = (el) => {
@@ -23,40 +22,36 @@ export default class Input extends Component {
     id: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
     onChange: PropTypes.func,
-  };
-
-  state = {
-    value: getDebugValue.next().value,
+    value: PropTypes.string,
   };
 
   componentDidMount() {
-    this.onTableUpdate();
-  }
-
-  onChange = (event) => {
-    const { value } = event.target;
-
-    this.setState({ value }, this.onTableUpdate);
-  }
-
-  onDnDChange = ([firstValue]) => {
-    this.setState({ value: firstValue }, this.onTableUpdate);
-  }
-
-  onTableUpdate = () => {
-    const { onChange } = this.props;
-    const { value } = this.state;
-
     setRows(this.textarea);
+  }
 
-    if (onChange) {
-      onChange(value);
+  componentDidUpdate(prevProps) {
+    const { value } = this.props;
+
+    if (value !== prevProps.value) {
+      setRows(this.textarea);
     }
   }
 
+  onChange = (event) => {
+    const { onChange } = this.props;
+    const { value } = event.target;
+
+    onChange(value);
+  }
+
+  onDnDChange = ([firstValue]) => {
+    const { onChange } = this.props;
+
+    onChange(firstValue);
+  }
+
   render() {
-    const { id, label } = this.props;
-    const { value } = this.state;
+    const { id, label, value } = this.props;
 
     return (
       <DragAndDrop

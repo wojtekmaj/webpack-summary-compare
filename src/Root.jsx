@@ -2,13 +2,15 @@ import React, { Component } from 'react';
 
 import './InputWrapper.less';
 
+import getDebugValue from './__debug/getDebugValue';
+
 import Comparison from './Comparison';
 import InputWrapper from './InputWrapper';
 
 export default class Root extends Component {
   state = {
-    left: null,
-    right: null,
+    left: getDebugValue.next().value,
+    right: getDebugValue.next().value,
   }
 
   onChangeLeft = value => this.setState({ left: value });
@@ -21,8 +23,16 @@ export default class Root extends Component {
       <>
         <h1>Webpack summary compare</h1>
         <main>
-          <InputWrapper onChangeLeft={this.onChangeLeft} onChangeRight={this.onChangeRight} />
-          <Comparison left={left} right={right} />
+          <InputWrapper
+            onChangeLeft={this.onChangeLeft}
+            onChangeRight={this.onChangeRight}
+            valueLeft={left}
+            valueRight={right}
+          />
+          <Comparison
+            left={left.trim()}
+            right={right.trim()}
+          />
         </main>
       </>
     );
