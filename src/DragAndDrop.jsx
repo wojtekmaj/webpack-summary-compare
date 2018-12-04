@@ -25,7 +25,7 @@ export default class DragAndDrop extends Component {
   static propTypes = {
     children: PropTypes.node,
     onChange: PropTypes.func,
-    onlyAccept: PropTypes.number,
+    acceptOnlyNFiles: PropTypes.number,
   };
 
   state = {
@@ -73,47 +73,47 @@ export default class DragAndDrop extends Component {
     this.cleanupDrag(event);
   };
 
-    cleanupDrag = (event) => {
-      if (event.dataTransfer.items) {
-        // Use DataTransferItemList interface to remove the drag data
-        event.dataTransfer.items.clear();
-      } else {
-        // Use DataTransfer interface to remove the drag data
-        event.dataTransfer.clearData();
-      }
-
-      this.onDragLeave();
+  cleanupDrag = (event) => {
+    if (event.dataTransfer.items) {
+      // Use DataTransferItemList interface to remove the drag data
+      event.dataTransfer.items.clear();
+    } else {
+      // Use DataTransfer interface to remove the drag data
+      event.dataTransfer.clearData();
     }
 
-    onDragLeave = () => {
-      this.setState({
-        isActive: false,
-      });
+    this.onDragLeave();
+  }
+
+  onDragLeave = () => {
+    this.setState({
+      isActive: false,
+    });
+  }
+
+  shouldReact(event) {
+    const { acceptOnlyNFiles } = this.props;
+
+    if (acceptOnlyNFiles && event.dataTransfer.items.length !== acceptOnlyNFiles) {
+      return false;
     }
 
-    shouldReact(event) {
-      const { onlyAccept } = this.props;
+    return true;
+  }
 
-      if (onlyAccept && event.dataTransfer.items.length !== onlyAccept) {
-        return false;
-      }
+  render() {
+    const { children } = this.props;
+    const { isActive } = this.state;
 
-      return true;
-    }
-
-    render() {
-      const { children } = this.props;
-      const { isActive } = this.state;
-
-      return (
-        <div
-          className={mergeClassNames('DragAndDrop', isActive && 'DragAndDrop--active')}
-          onDragOver={this.onDragOver}
-          onDragLeave={this.onDragLeave}
-          onDrop={this.onDrop}
-        >
-          {children}
-        </div>
-      );
-    }
+    return (
+      <div
+        className={mergeClassNames('DragAndDrop', isActive && 'DragAndDrop--active')}
+        onDragOver={this.onDragOver}
+        onDragLeave={this.onDragLeave}
+        onDrop={this.onDrop}
+      >
+        {children}
+      </div>
+    );
+  }
 }

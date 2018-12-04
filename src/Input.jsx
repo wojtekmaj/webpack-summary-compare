@@ -55,7 +55,7 @@ export default class Input extends Component {
 
     return (
       <DragAndDrop
-        onlyAccept={1}
+        acceptOnlyNFiles={1}
         onChange={this.onDnDChange}
       >
         <div className="Input">

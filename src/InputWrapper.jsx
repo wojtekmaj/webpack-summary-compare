@@ -31,7 +31,7 @@ export default class InputWrapper extends Component {
 
     return (
       <DragAndDrop
-        onlyAccept={2}
+        acceptOnlyNFiles={2}
         onChange={this.onDnDChange}
       >
         <section className="InputWrapper">
