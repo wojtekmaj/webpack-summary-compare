@@ -210,10 +210,9 @@ export default class Comparison extends Component {
         </div>
         <div className="Comparison__source">
           <h3>Source</h3>
-          <CopyButton
-            label="Copy source"
-            text={textSource}
-          />
+          <CopyButton text={textSource}>
+            Copy source
+          </CopyButton>
           <textarea
             onFocus={(event) => {
               event.target.select();

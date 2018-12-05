@@ -36,17 +36,17 @@ const copy = async (text) => {
 
 export default class CopyButton extends Component {
   static propTypes = {
+    children: PropTypes.node,
     confirmationLabel: PropTypes.node,
     failureLabel: PropTypes.node,
-    label: PropTypes.node,
     temporaryLabelTimeout: PropTypes.number,
     text: PropTypes.string.isRequired,
   }
 
   static defaultProps = {
+    children: 'Copy',
     confirmationLabel: 'Copied!',
     failureLabel: 'Failed to copy',
-    label: 'Copy',
     temporaryLabelTimeout: 3000,
   };
 
@@ -55,11 +55,11 @@ export default class CopyButton extends Component {
   }
 
   get label() {
-    const { confirmationLabel, failureLabel, label } = this.props;
+    const { children, confirmationLabel, failureLabel } = this.props;
     const { copyState } = this.state;
 
     if (copyState === null) {
-      return label;
+      return children;
     }
 
     return copyState ? confirmationLabel : failureLabel;
