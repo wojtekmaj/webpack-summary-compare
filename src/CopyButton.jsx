@@ -15,12 +15,11 @@ const fallbackCopy = (text) => {
 };
 
 const copy = async (text) => {
-  if (!navigator.clipboard) {
-    // Clipboard API not supported
-    fallbackCopy(text);
-  }
-
   try {
+    if (!navigator.clipboard) {
+      throw new Error('Clipboard API not supported');
+    }
+
     const permission = await navigator.permissions.query({ name: 'clipboard-write' });
 
     if (permission.state === 'granted' || permission.state === 'prompt') {
@@ -29,7 +28,6 @@ const copy = async (text) => {
       throw new Error('clipboard-write permission not granted');
     }
   } catch (error) {
-    // clipboard-write permission not supported
     fallbackCopy(text);
   }
 };
