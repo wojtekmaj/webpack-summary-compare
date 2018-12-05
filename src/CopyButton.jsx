@@ -36,16 +36,18 @@ const copy = async (text) => {
 
 export default class CopyButton extends Component {
   static propTypes = {
-    label: PropTypes.node,
     confirmationLabel: PropTypes.node,
     failureLabel: PropTypes.node,
+    label: PropTypes.node,
+    temporaryLabelTimeout: PropTypes.number,
     text: PropTypes.string.isRequired,
   }
 
   static defaultProps = {
-    label: 'Copy',
     confirmationLabel: 'Copied!',
     failureLabel: 'Failed to copy',
+    label: 'Copy',
+    temporaryLabelTimeout: 3000,
   };
 
   state = {
@@ -64,9 +66,9 @@ export default class CopyButton extends Component {
   }
 
   onClick = async () => {
-    const { text } = this.props;
+    const { temporaryLabelTimeout, text } = this.props;
 
-    const reset = () => setTimeout(() => this.setState({ copyState: null }), 3000);
+    const reset = () => setTimeout(() => this.setState({ copyState: null }), temporaryLabelTimeout);
 
     try {
       await copy(text);
