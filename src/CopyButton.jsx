@@ -1,0 +1,93 @@
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+
+const fallbackCopy = (text) => {
+  const textArea = document.createElement('textarea');
+  textArea.value = text;
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
+  const result = document.execCommand('copy');
+  document.body.removeChild(textArea);
+  if (!result) {
+    throw new Error('execCommand failed');
+  }
+};
+
+const copy = async (text) => {
+  if (!navigator.clipboard) {
+    // Clipboard API not supported
+    fallbackCopy(text);
+  }
+
+  try {
+    const permission = await navigator.permissions.query({ name: 'clipboard-write' });
+
+    if (permission.state === 'granted' || permission.state === 'prompt') {
+      await navigator.clipboard.writeText(text);
+    } else {
+      throw new Error('clipboard-write permission not granted');
+    }
+  } catch (error) {
+    // clipboard-write permission not supported
+    fallbackCopy(text);
+  }
+};
+
+export default class CopyButton extends Component {
+  static propTypes = {
+    label: PropTypes.node,
+    confirmationLabel: PropTypes.node,
+    failureLabel: PropTypes.node,
+    text: PropTypes.string.isRequired,
+  }
+
+  static defaultProps = {
+    label: 'Copy',
+    confirmationLabel: 'Copied!',
+    failureLabel: 'Failed to copy',
+  };
+
+  state = {
+    copyState: null,
+  }
+
+  get label() {
+    const { confirmationLabel, failureLabel, label } = this.props;
+    const { copyState } = this.state;
+
+    if (copyState === null) {
+      return label;
+    }
+
+    return copyState ? confirmationLabel : failureLabel;
+  }
+
+  onClick = async () => {
+    const { text } = this.props;
+
+    const reset = () => setTimeout(() => this.setState({ copyState: null }), 3000);
+
+    try {
+      await copy(text);
+      this.setState({ copyState: true }, reset);
+    } catch (error) {
+      this.setState({ copyState: false }, reset);
+    }
+  }
+
+  render() {
+    const { label } = this;
+    const { copyState } = this.state;
+
+    return (
+      <button
+        type="button"
+        onClick={this.onClick}
+        disabled={copyState === true}
+      >
+        {label}
+      </button>
+    );
+  }
+}

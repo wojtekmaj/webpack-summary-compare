@@ -3,6 +3,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 
 import './Comparison.less';
 
+import CopyButton from './CopyButton';
 import Diff from './Diff';
 import SizeDiff from './SizeDiff';
 
@@ -209,6 +210,10 @@ export default class Comparison extends Component {
         </div>
         <div className="Comparison__source">
           <h3>Source</h3>
+          <CopyButton
+            label="Copy source"
+            text={textSource}
+          />
           <textarea
             onFocus={(event) => {
               event.target.select();
