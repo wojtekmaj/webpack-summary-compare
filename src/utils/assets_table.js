@@ -50,7 +50,27 @@ const removeHash = (name = '', hash) => {
     return name;
   }
 
-  return name.replace(hash, '\\[hash\\]');
+  return name.replace(`-${hash}`, '-\\[hash\\]');
+};
+
+const removeId = (name = '', chunks) => {
+  if (!chunks || `${parseInt(chunks, 10)}` !== chunks) {
+    return name;
+  }
+
+  return name.replace(`-${chunks}`, '-\\[id\\]');
+};
+
+const formatAsset = (asset, hash) => {
+  let { Asset: name } = asset;
+  name = removeHash(name, hash);
+  name = removeId(name, asset.Chunks);
+  name = name.replace(/~/g, '&shy;~');
+
+  return {
+    ...asset,
+    Asset: name,
+  };
 };
 
 export const getParsedAssetsTable = (value) => {
@@ -62,10 +82,7 @@ export const getParsedAssetsTable = (value) => {
   const assetsTable = getAssetsTable(value);
   const parsedAssetsTable = parseTable(assetsTable);
 
-  return parsedAssetsTable.map(asset => ({
-    ...asset,
-    Asset: removeHash(asset.Asset, hash).replace(/~/g, '&shy;~'),
-  }));
+  return parsedAssetsTable.map(asset => formatAsset(asset, hash));
 };
 
 export const getStatProperties = value => ['Hash', 'Version', 'Time', 'Built at']
