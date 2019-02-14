@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 const fallbackCopy = (text) => {
   const textArea = document.createElement('textarea');
   textArea.value = text;
+  textArea.style.position = "fixed";
   document.body.appendChild(textArea);
   textArea.focus();
   textArea.select();
