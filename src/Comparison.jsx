@@ -15,7 +15,7 @@ import {
 import { parseSize } from './utils/units';
 
 const ReactMarkdown = lazy(() => new Promise((resolve, reject) => {
-  import('react-markdown/with-html')
+  import('./react-markdown')
     .then(result => resolve(result.default ? result : { default: result }))
     .catch(reject);
 }));
