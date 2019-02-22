@@ -102,7 +102,7 @@ export default class Comparison extends Component {
     const filename = (() => {
       const isMap = asset.Asset.endsWith('.map');
 
-      const shortenedFilename = cutString(asset.Asset, 60);
+      const shortenedFilename = cutString(asset.Asset, 80).replace(/~/g, '&shy;&#126;');
       const wrappedShortenedFilename = `<span title="${unescapeMd(asset.Asset)}">${shortenedFilename}</span>`;
 
       if (isMap) {
@@ -217,7 +217,7 @@ export default class Comparison extends Component {
 
   getTextSource() {
     const source = this.renderSource();
-    return unescape(renderToStaticMarkup(source)).replace(/~/g, '&shy;~');
+    return unescape(renderToStaticMarkup(source));
   }
 
   render() {
