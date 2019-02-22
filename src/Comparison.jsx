@@ -15,7 +15,7 @@ import {
 import { parseSize } from './utils/units';
 
 const ReactMarkdown = lazy(() => new Promise((resolve, reject) => {
-  import('react-markdown')
+  import('react-markdown/with-html')
     .then(result => resolve(result.default ? result : { default: result }))
     .catch(reject);
 }));
@@ -30,6 +30,8 @@ const unescape = (html) => {
   el.innerHTML = html;
   return el.value;
 };
+
+const unescapeMd = md => md.replace(/\\([[\]])/g, '$1');
 
 export default class Comparison extends Component {
   static getDerivedStateFromProps(nextProps) {
@@ -101,7 +103,7 @@ export default class Comparison extends Component {
       const isMap = asset.Asset.endsWith('.map');
 
       const shortenedFilename = cutString(asset.Asset, 60);
-      const wrappedShortenedFilename = `<span title="${asset.Asset}">${shortenedFilename}</span>`;
+      const wrappedShortenedFilename = `<span title="${unescapeMd(asset.Asset)}">${shortenedFilename}</span>`;
 
       if (isMap) {
         return wrappedShortenedFilename;
