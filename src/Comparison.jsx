@@ -5,6 +5,7 @@ import './Comparison.less';
 
 import CopyButton from './CopyButton';
 import Diff from './Diff';
+import FileIcon from './FileIcon';
 import SizeDiff from './SizeDiff';
 
 import {
@@ -91,9 +92,19 @@ export default class Comparison extends Component {
       return null;
     }
 
+    const filename = (() => {
+      const isMap = asset.Asset.endsWith('.map');
+
+      if (isMap) {
+        return asset.Asset;
+      }
+
+      return `**${asset.Asset}**`;
+    })();
+
     return (
       <>
-        | **{asset.Asset}** |
+        | <FileIcon filename={asset.Asset} /> {filename} |
         {' '}
         {<SizeDiff
           size={asset.Size}
