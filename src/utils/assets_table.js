@@ -53,6 +53,8 @@ const removeHash = (name = '', hash) => {
   return name.replace(`-${hash}`, '-\\[hash\\]');
 };
 
+const removeShortHash = (name = '') => name.replace(/~[0-f]{8}/, '~\\[…\\]');
+
 const removeId = (name = '', chunks) => {
   if (!chunks || `${parseInt(chunks, 10)}` !== chunks) {
     return name;
@@ -64,6 +66,7 @@ const removeId = (name = '', chunks) => {
 const formatAsset = (asset, hash) => {
   let { Asset: name } = asset;
   name = removeHash(name, hash);
+  name = removeShortHash(name);
   name = removeId(name, asset.Chunks);
   name = name.replace(/~/g, '&shy;~');
 
