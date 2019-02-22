@@ -68,7 +68,6 @@ const formatAsset = (asset, hash) => {
   name = removeHash(name, hash);
   name = removeShortHash(name);
   name = removeId(name, asset.Chunks);
-  name = name.replace(/~/g, '&shy;~');
 
   return {
     ...asset,

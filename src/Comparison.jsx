@@ -20,6 +20,11 @@ const ReactMarkdown = lazy(() => new Promise((resolve, reject) => {
     .catch(reject);
 }));
 
+const cutString = (str, max) => (str.length > max
+  ? `${str.slice(0, max / 2)}…${str.slice(str.length - max / 2, str.length)}`
+  : str
+);
+
 const unescape = (html) => {
   const el = document.createElement('textarea');
   el.innerHTML = html;
@@ -95,11 +100,14 @@ export default class Comparison extends Component {
     const filename = (() => {
       const isMap = asset.Asset.endsWith('.map');
 
+      const shortenedFilename = cutString(asset.Asset, 60);
+      const wrappedShortenedFilename = `<span title="${asset.Asset}">${shortenedFilename}</span>`;
+
       if (isMap) {
-        return asset.Asset;
+        return wrappedShortenedFilename;
       }
 
-      return `**${asset.Asset}**`;
+      return `**${wrappedShortenedFilename}**`;
     })();
 
     return (
@@ -207,7 +215,7 @@ export default class Comparison extends Component {
 
   getTextSource() {
     const source = this.renderSource();
-    return unescape(renderToStaticMarkup(source));
+    return unescape(renderToStaticMarkup(source)).replace(/~/g, '&shy;~');
   }
 
   render() {
