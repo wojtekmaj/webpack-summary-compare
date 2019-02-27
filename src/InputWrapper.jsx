@@ -21,6 +21,18 @@ export default class InputWrapper extends Component {
     onChangeRight(values[1]);
   }
 
+  onSwap = () => {
+    const {
+      onChangeLeft,
+      onChangeRight,
+      valueLeft,
+      valueRight,
+    } = this.props;
+
+    onChangeLeft(valueRight);
+    onChangeRight(valueLeft);
+  }
+
   render() {
     const {
       onChangeLeft,
@@ -55,6 +67,16 @@ export default class InputWrapper extends Component {
             onChange={onChangeRight}
             value={valueRight}
           />
+          <button
+            type="button"
+            className="InputWrapper__swapButton"
+            onClick={this.onSwap}
+            title="Swap outputs"
+          >
+            <span role="img" aria-label="Swap outputs">
+              🔄
+            </span>
+          </button>
         </section>
       </DragAndDrop>
     );
