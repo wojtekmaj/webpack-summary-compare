@@ -12,14 +12,14 @@ const parseLine = (line, { columnNames, tableColumnsEnds }) => {
   }), {});
 };
 
-const getAllColumnsEnds = (lines) => {
+export const getAllColumnsEnds = (lines, minSpaces = 2) => {
   const maxLineLength = lines.reduce((maxLength, line) => Math.max(maxLength, line.length), 0);
 
   const columnsEnds = [];
 
   // Find all places where all lines have at least two spaces next to each other
   for (let i = 0; i < maxLineLength; i += 1) {
-    if (i === 0 || lines.every(line => line[i] === ' ' && line[i + 1] === ' ')) {
+    if (i === 0 || lines.every(line => line.slice(i, i + minSpaces) === ' '.repeat(minSpaces))) {
       columnsEnds.push(i);
     }
   }

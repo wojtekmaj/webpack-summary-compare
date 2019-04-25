@@ -16,8 +16,10 @@ export const parseSize = (sizeString) => {
   switch (unit) {
     case 'bytes':
       return parseInt(valueNum, 10);
+    case 'KB':
     case 'KiB':
       return parseInt(valueNum * KiB, 10);
+    case 'MB':
     case 'MiB':
       return parseInt(valueNum * MiB, 10);
     default:
