@@ -21,6 +21,8 @@ export const getAllColumnsEnds = (lines, minSpaces = 2) => {
   for (let i = 0; i < maxLineLength; i += 1) {
     if (i === 0 || lines.every(line => line.slice(i, i + minSpaces) === ' '.repeat(minSpaces))) {
       columnsEnds.push(i);
+      // Skip the next few columns because we were checking them all at once
+      i += minSpaces - 1;
     }
   }
 
