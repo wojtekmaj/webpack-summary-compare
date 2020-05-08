@@ -125,8 +125,8 @@ export default class Comparison extends Component {
         |
         {' '}
         {<SizeDiff
-          size={asset.Size}
-          newSize={asset.newSize}
+          a={asset.Size}
+          b={asset.newSize}
         /> || asset.Size}
         {' '}
         |
@@ -191,8 +191,8 @@ export default class Comparison extends Component {
         **Total size**:
         {' '}
         <SizeDiff
-          size={size}
-          newSize={newSize}
+          a={size}
+          b={newSize}
         />
         {'\n'}
         {'\n'}
@@ -201,8 +201,8 @@ export default class Comparison extends Component {
             **Total size excl. source maps**:
             {' '}
             <SizeDiff
-              size={sizeNoMap}
-              newSize={newSizeNoMap}
+              a={sizeNoMap}
+              b={newSizeNoMap}
             />
             {'\n'}
             {'\n'}
@@ -211,8 +211,8 @@ export default class Comparison extends Component {
         **Time**:
         {' '}
         <Diff
-          value={time}
-          newValue={newTime}
+          a={time}
+          b={newTime}
           unit="ms"
         />
       </>

@@ -1,37 +1,45 @@
-const SizeDiff = ({ unit, value, newValue }) => {
-  const parsedSize = parseFloat(value);
+function defaultFormat(value) {
+  const roundedValue = value.toFixed(2) * 1; // Remove insignificant trailing zeros
+  return roundedValue;
+}
 
-  const format = (diffValue) => {
-    const roundedValue = diffValue.toFixed(2) * 1; // Remove insignificant trailing zeros
-    return `${roundedValue}&nbsp;${unit}`;
-  };
-
-  if (!newValue) {
-    return format(parsedSize);
+export default function Diff({
+  unit,
+  format = defaultFormat,
+  parse = parseFloat,
+  a,
+  b,
+}) {
+  function formatWithUnit(value) {
+    return format(value) + (unit ? `&nbsp;${unit}` : '');
   }
 
-  const parsedNewSize = parseFloat(newValue);
+  const parsedA = parse(a);
 
-  const diff = parsedNewSize - parsedSize;
-  const diffPercent = ((parsedNewSize / parsedSize) * 100) - 100;
+  if (!b) {
+    return formatWithUnit(parsedA);
+  }
+
+  const parsedB = parse(b);
+
+  const diff = parsedB - parsedA;
+  const diffPercent = ((parsedB / parsedA) * 100) - 100;
 
   if (!diff) {
-    return format(parsedSize);
+    return formatWithUnit(parsedA);
   }
 
   const risen = diff > 0;
 
   return `${
-    format(parsedSize)
+    formatWithUnit(parsedA)
   } → ${
-    format(parsedNewSize)
+    formatWithUnit(parsedB)
   } (${
-    format(diff)
+    formatWithUnit(diff)
   }; ${
     diffPercent.toFixed(2)
   }% ${
     risen ? '↗' : '↘'
   })`;
-};
-
-export default SizeDiff;
+}
