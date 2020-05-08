@@ -12,10 +12,11 @@ const getAssetsTable = (value) => {
   const tableHeaderLine = getTableHeaderLine(lines);
   const tableHeaderLineIndex = lines.indexOf(tableHeaderLine);
   const linesStartingFromTableContent = trimmedLines.slice(tableHeaderLineIndex + 1);
-  let tableEndLineIndex = linesStartingFromTableContent.findIndex(line => line.startsWith('Entrypoint'));
+
+  let tableEndLineIndex = -1;
   // No "Entrypoint" output included
   if (tableEndLineIndex === -1) {
-    tableEndLineIndex = linesStartingFromTableContent.findIndex(line => !line.includes('KiB') && !line.includes('MiB'));
+    tableEndLineIndex = linesStartingFromTableContent.findIndex(line => !['KiB', 'MiB', 'bytes'].some(el => line.includes(`${el}  `)));
   }
   // No lines after assets table
   if (tableEndLineIndex === -1) {
