@@ -64,8 +64,10 @@ export default class Comparison extends Component {
 
     const newAssets = rightData.assets
       .filter(rightEl => !leftData.assets.find(leftEl => leftEl.Asset === rightEl.Asset));
+
     const removedAssets = leftData.assets
       .filter(leftEl => !rightData.assets.find(rightEl => leftEl.Asset === rightEl.Asset));
+
     const changedAssets = leftData.assets
       .filter((leftElement) => {
         const rightElement = rightData.assets.find(rightEl => leftElement.Asset === rightEl.Asset);
@@ -114,14 +116,21 @@ export default class Comparison extends Component {
 
     return (
       <>
-        | <FileIcon filename={asset.Asset} /> {filename} |
+        |
+        {' '}
+        <FileIcon filename={asset.Asset} />
+        {' '}
+        {filename}
+        {' '}
+        |
         {' '}
         {<SizeDiff
           size={asset.Size}
           newSize={asset.newSize}
         /> || asset.Size}
         {' '}
-        |{'\n'}
+        |
+        {'\n'}
       </>
     );
   }
@@ -136,9 +145,14 @@ export default class Comparison extends Component {
 
     return (
       <>
-        ## {title}{'\n'}
-        | Asset | Size |{'\n'}
-        | ----- | ---- |{'\n'}
+        ##
+        {' '}
+        {title}
+        {'\n'}
+        | Asset | Size |
+        {'\n'}
+        | ----- | ---- |
+        {'\n'}
         {sortedAssets.map(this.renderAsset)}
         {'\n'}
       </>
@@ -172,14 +186,16 @@ export default class Comparison extends Component {
 
     return (
       <>
-        ## Summary{'\n'}
+        ## Summary
+        {'\n'}
         **Total size**:
         {' '}
         <SizeDiff
           size={size}
           newSize={newSize}
         />
-        {'\n'}{'\n'}
+        {'\n'}
+        {'\n'}
         {mapsPresent && (
           <>
             **Total size excl. source maps**:
@@ -188,7 +204,8 @@ export default class Comparison extends Component {
               size={sizeNoMap}
               newSize={newSizeNoMap}
             />
-            {'\n'}{'\n'}
+            {'\n'}
+            {'\n'}
           </>
         )}
         **Time**:
