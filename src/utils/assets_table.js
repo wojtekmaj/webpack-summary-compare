@@ -51,7 +51,9 @@ const removeHash = (name = '', hash) => {
     return name;
   }
 
-  return name.replace(`-${hash}`, '-\\[hash\\]');
+  return name
+    .replace(new RegExp(`([.-])${hash}`), '$1\\[hash\\]')
+    .replace(new RegExp('([.-])([0-9a-f]{4,16})'), '$1\\[chunkhash\\]');
 };
 
 const removeShortHash = (name = '') => name.replace(/~[0-f]{8}/, '~\\[…\\]');
