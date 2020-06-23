@@ -49,8 +49,8 @@ export default class DragAndDrop extends Component {
     const files = (() => {
       if (event.dataTransfer.items) {
         return Array.from(event.dataTransfer.items)
-          .filter(item => item.kind === 'file')
-          .map(item => item.getAsFile());
+          .filter((item) => item.kind === 'file')
+          .map((item) => item.getAsFile());
       }
 
       return Array.from(event.dataTransfer.files);

@@ -13,9 +13,9 @@ export default class Root extends Component {
     right: getDebugValue.next().value,
   }
 
-  onChangeLeft = value => this.setState({ left: value });
+  onChangeLeft = (value) => this.setState({ left: value });
 
-  onChangeRight = value => this.setState({ right: value });
+  onChangeRight = (value) => this.setState({ right: value });
 
   render() {
     const { left, right } = this.state;

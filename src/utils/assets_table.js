@@ -1,10 +1,10 @@
 import parseTable from './parse_ascii_table';
 
-const getLines = value => value.split('\n').filter(Boolean);
+const getLines = (value) => value.split('\n').filter(Boolean);
 
-const trimLines = lines => lines.map(line => line.trim());
+const trimLines = (lines) => lines.map((line) => line.trim());
 
-const getTableHeaderLine = lines => lines.find(line => /\s*Asset\s*/.test(line));
+const getTableHeaderLine = (lines) => lines.find((line) => /\s*Asset\s*/.test(line));
 
 const getAssetsTable = (value) => {
   const lines = getLines(value);
@@ -16,7 +16,7 @@ const getAssetsTable = (value) => {
   let tableEndLineIndex = -1;
   // No "Entrypoint" output included
   if (tableEndLineIndex === -1) {
-    tableEndLineIndex = linesStartingFromTableContent.findIndex(line => !['KiB', 'MiB', 'bytes'].some(el => line.includes(`${el}  `)));
+    tableEndLineIndex = linesStartingFromTableContent.findIndex((line) => !['KiB', 'MiB', 'bytes'].some((el) => line.includes(`${el}  `)));
   }
   // No lines after assets table
   if (tableEndLineIndex === -1) {
@@ -35,7 +35,7 @@ export const getStatProperty = (value, key) => {
   const trimmedLines = trimLines(lines);
 
   const valueLabel = `${key}: `;
-  const valueLine = trimmedLines.find(line => line.startsWith(valueLabel));
+  const valueLine = trimmedLines.find((line) => line.startsWith(valueLabel));
 
   if (!valueLine) {
     return null;
@@ -44,7 +44,7 @@ export const getStatProperty = (value, key) => {
   return valueLine.slice(valueLabel.length);
 };
 
-const getHash = value => getStatProperty(value, 'Hash');
+const getHash = (value) => getStatProperty(value, 'Hash');
 
 const removeHash = (name = '', hash) => {
   if (!hash) {
@@ -87,10 +87,10 @@ export const getParsedAssetsTable = (value) => {
   const assetsTable = getAssetsTable(value);
   const parsedAssetsTable = parseTable(assetsTable);
 
-  return parsedAssetsTable.map(asset => formatAsset(asset, hash));
+  return parsedAssetsTable.map((asset) => formatAsset(asset, hash));
 };
 
-export const getStatProperties = value => ['Hash', 'Version', 'Time', 'Built at']
+export const getStatProperties = (value) => ['Hash', 'Version', 'Time', 'Built at']
   .reduce((result, key) => ({
     ...result,
     [key]: getStatProperty(value, key),

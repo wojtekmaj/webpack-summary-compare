@@ -17,7 +17,7 @@ import { parseSize } from './utils/units';
 
 const ReactMarkdown = lazy(() => new Promise((resolve, reject) => {
   import('./react-markdown')
-    .then(result => resolve(result.default ? result : { default: result }))
+    .then((result) => resolve(result.default ? result : { default: result }))
     .catch(reject);
 }));
 
@@ -32,7 +32,7 @@ const unescape = (html) => {
   return el.value;
 };
 
-const unescapeMd = md => md.replace(/\\([[\]])/g, '$1');
+const unescapeMd = (md) => md.replace(/\\([[\]])/g, '$1');
 
 export default class Comparison extends Component {
   static getDerivedStateFromProps(nextProps) {
@@ -64,21 +64,25 @@ export default class Comparison extends Component {
     }
 
     const newAssets = rightData.assets
-      .filter(rightEl => !leftData.assets.find(leftEl => leftEl.Asset === rightEl.Asset));
+      .filter((rightEl) => !leftData.assets.find((leftEl) => leftEl.Asset === rightEl.Asset));
 
     const removedAssets = leftData.assets
-      .filter(leftEl => !rightData.assets.find(rightEl => leftEl.Asset === rightEl.Asset));
+      .filter((leftEl) => !rightData.assets.find((rightEl) => leftEl.Asset === rightEl.Asset));
 
     const changedAssets = leftData.assets
       .filter((leftElement) => {
-        const rightElement = rightData.assets.find(rightEl => leftElement.Asset === rightEl.Asset);
+        const rightElement = rightData.assets
+          .find((rightEl) => leftElement.Asset === rightEl.Asset);
+
         if (!rightElement) {
           return false;
         }
+
         return leftElement.Size !== rightElement.Size;
       })
       .map((leftElement) => {
-        const rightElement = rightData.assets.find(rightEl => leftElement.Asset === rightEl.Asset);
+        const rightElement = rightData.assets
+          .find((rightEl) => leftElement.Asset === rightEl.Asset);
 
         return {
           Asset: leftElement.Asset,
@@ -171,8 +175,8 @@ export default class Comparison extends Component {
     const { assets: rightAssets } = rightData;
 
     const sumSizes = (sum, asset) => sum + parseSize(asset.Size);
-    const onlyMaps = asset => asset.Asset.endsWith('.map');
-    const excludeMaps = asset => !onlyMaps(asset);
+    const onlyMaps = (asset) => asset.Asset.endsWith('.map');
+    const excludeMaps = (asset) => !onlyMaps(asset);
 
     const mapsPresent = leftAssets.some(onlyMaps) || rightAssets.some(onlyMaps);
 

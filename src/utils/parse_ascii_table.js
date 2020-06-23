@@ -1,4 +1,4 @@
-const getLines = value => value.split('\n').filter(Boolean);
+const getLines = (value) => value.split('\n').filter(Boolean);
 
 const sliceLineIntoValues = (line, tableColumnsEnds) => tableColumnsEnds
   .map((el, index, arr) => line.slice(el, arr[index + 1] || line.length).trim());
@@ -19,7 +19,7 @@ const getAllColumnsEnds = (lines) => {
 
   // Find all places where all lines have at least two spaces next to each other
   for (let i = 0; i < maxLineLength; i += 1) {
-    if (i === 0 || lines.every(line => line[i] === ' ' && line[i + 1] === ' ')) {
+    if (i === 0 || lines.every((line) => line[i] === ' ' && line[i + 1] === ' ')) {
       columnsEnds.push(i);
     }
   }
@@ -41,7 +41,7 @@ const parseTable = (input) => {
   const tableColumnsEnds = getAllColumnsEnds(lines);
   const columnNames = getTableColumnNames(headerLine, tableColumnsEnds);
 
-  return contentLines.map(line => parseLine(line, { columnNames, tableColumnsEnds }));
+  return contentLines.map((line) => parseLine(line, { columnNames, tableColumnsEnds }));
 };
 
 export default parseTable;
