@@ -1,4 +1,5 @@
 import React, { lazy, Component, Suspense } from 'react';
+import PropTypes from 'prop-types';
 import { renderToStaticMarkup } from 'react-dom/server';
 
 import './Comparison.less';
@@ -274,3 +275,8 @@ export default class Comparison extends Component {
     );
   }
 }
+
+Comparison.propTypes = {
+  left: PropTypes.string,
+  right: PropTypes.string,
+};
