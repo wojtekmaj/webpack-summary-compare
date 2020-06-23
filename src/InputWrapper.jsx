@@ -7,13 +7,6 @@ import Input from './Input';
 import DragAndDrop from './DragAndDrop';
 
 export default class InputWrapper extends Component {
-  static propTypes = {
-    onChangeLeft: PropTypes.func.isRequired,
-    onChangeRight: PropTypes.func.isRequired,
-    valueLeft: PropTypes.string,
-    valueRight: PropTypes.string,
-  };
-
   onDnDChange = (values) => {
     const { onChangeLeft, onChangeRight } = this.props;
 
@@ -82,3 +75,10 @@ export default class InputWrapper extends Component {
     );
   }
 }
+
+InputWrapper.propTypes = {
+  onChangeLeft: PropTypes.func.isRequired,
+  onChangeRight: PropTypes.func.isRequired,
+  valueLeft: PropTypes.string,
+  valueRight: PropTypes.string,
+};

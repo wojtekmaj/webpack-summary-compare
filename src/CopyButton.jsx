@@ -34,14 +34,6 @@ const copy = async (text) => {
 };
 
 export default class CopyButton extends Component {
-  static propTypes = {
-    children: PropTypes.node,
-    confirmationLabel: PropTypes.node,
-    failureLabel: PropTypes.node,
-    temporaryLabelTimeout: PropTypes.number,
-    text: PropTypes.string.isRequired,
-  }
-
   static defaultProps = {
     children: 'Copy',
     confirmationLabel: 'Copied!',
@@ -92,3 +84,11 @@ export default class CopyButton extends Component {
     );
   }
 }
+
+CopyButton.propTypes = {
+  children: PropTypes.node,
+  confirmationLabel: PropTypes.node,
+  failureLabel: PropTypes.node,
+  temporaryLabelTimeout: PropTypes.number,
+  text: PropTypes.string.isRequired,
+};

@@ -18,13 +18,6 @@ const setRows = (el) => {
 };
 
 export default class Input extends Component {
-  static propTypes = {
-    id: PropTypes.string.isRequired,
-    label: PropTypes.string.isRequired,
-    onChange: PropTypes.func,
-    value: PropTypes.string,
-  };
-
   componentDidMount() {
     setRows(this.textarea);
   }
@@ -80,3 +73,10 @@ export default class Input extends Component {
     );
   }
 }
+
+Input.propTypes = {
+  id: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  onChange: PropTypes.func,
+  value: PropTypes.string,
+};

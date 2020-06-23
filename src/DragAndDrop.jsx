@@ -22,12 +22,6 @@ const readFileAsText = (file) => {
 };
 
 export default class DragAndDrop extends Component {
-  static propTypes = {
-    children: PropTypes.node,
-    onChange: PropTypes.func,
-    acceptOnlyNFiles: PropTypes.number,
-  };
-
   state = {
     isActive: false,
   };
@@ -117,3 +111,9 @@ export default class DragAndDrop extends Component {
     );
   }
 }
+
+DragAndDrop.propTypes = {
+  children: PropTypes.node,
+  onChange: PropTypes.func,
+  acceptOnlyNFiles: PropTypes.number,
+};
