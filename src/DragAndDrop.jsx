@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import mergeClassNames from 'merge-class-names';
 
 import './DragAndDrop.less';
 
-const readFileAsText = (file) => {
+function readFileAsText(file) {
   const fileReader = new FileReader();
 
   return new Promise((resolve, reject) => {
@@ -19,27 +19,47 @@ const readFileAsText = (file) => {
 
     fileReader.readAsText(file);
   });
-};
+}
 
-export default class DragAndDrop extends Component {
-  state = {
-    isActive: false,
-  };
+export default function DragAndDrop({ acceptOnlyNFiles, children, onChange }) {
+  const [isActive, setIsActive] = useState(false);
 
-  onDragOver = (event) => {
-    if (!this.shouldReact(event)) {
+  function shouldReact(event) {
+    if (acceptOnlyNFiles && event.dataTransfer.items.length !== acceptOnlyNFiles) {
+      return false;
+    }
+
+    return true;
+  }
+
+  function onDragOver(event) {
+    if (!shouldReact(event)) {
       return;
     }
 
     event.preventDefault();
 
-    this.setState({
-      isActive: true,
-    });
-  };
+    setIsActive(true);
+  }
 
-  onDrop = (event) => {
-    if (!this.shouldReact(event)) {
+  function onDragLeave() {
+    setIsActive(false);
+  }
+
+  function cleanupDrag(event) {
+    if (event.dataTransfer.items) {
+      // Use DataTransferItemList interface to remove the drag data
+      event.dataTransfer.items.clear();
+    } else {
+      // Use DataTransfer interface to remove the drag data
+      event.dataTransfer.clearData();
+    }
+
+    onDragLeave();
+  }
+
+  function onDrop(event) {
+    if (!shouldReact(event)) {
       return;
     }
 
@@ -60,56 +80,21 @@ export default class DragAndDrop extends Component {
       return;
     }
 
-    const { onChange } = this.props;
-
     Promise.all(files.map(readFileAsText)).then(onChange);
 
-    this.cleanupDrag(event);
-  };
-
-  cleanupDrag = (event) => {
-    if (event.dataTransfer.items) {
-      // Use DataTransferItemList interface to remove the drag data
-      event.dataTransfer.items.clear();
-    } else {
-      // Use DataTransfer interface to remove the drag data
-      event.dataTransfer.clearData();
-    }
-
-    this.onDragLeave();
+    cleanupDrag(event);
   }
 
-  onDragLeave = () => {
-    this.setState({
-      isActive: false,
-    });
-  }
-
-  shouldReact(event) {
-    const { acceptOnlyNFiles } = this.props;
-
-    if (acceptOnlyNFiles && event.dataTransfer.items.length !== acceptOnlyNFiles) {
-      return false;
-    }
-
-    return true;
-  }
-
-  render() {
-    const { children } = this.props;
-    const { isActive } = this.state;
-
-    return (
-      <div
-        className={mergeClassNames('DragAndDrop', isActive && 'DragAndDrop--active')}
-        onDragOver={this.onDragOver}
-        onDragLeave={this.onDragLeave}
-        onDrop={this.onDrop}
-      >
-        {children}
-      </div>
-    );
-  }
+  return (
+    <div
+      className={mergeClassNames('DragAndDrop', isActive && 'DragAndDrop--active')}
+      onDragOver={onDragOver}
+      onDragLeave={onDragLeave}
+      onDrop={onDrop}
+    >
+      {children}
+    </div>
+  );
 }
 
 DragAndDrop.propTypes = {

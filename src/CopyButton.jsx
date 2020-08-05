@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 
-const fallbackCopy = (text) => {
+function fallbackCopy(text) {
   const textArea = document.createElement('textarea');
   textArea.value = text;
   textArea.style.position = 'fixed';
@@ -13,9 +13,9 @@ const fallbackCopy = (text) => {
   if (!result) {
     throw new Error('execCommand failed');
   }
-};
+}
 
-const copy = async (text) => {
+async function copy(text) {
   try {
     if (!navigator.clipboard) {
       throw new Error('Clipboard API not supported');
@@ -31,51 +31,47 @@ const copy = async (text) => {
   } catch (error) {
     fallbackCopy(text);
   }
-};
+}
 
-export default class CopyButton extends Component {
-  state = {
-    copyState: null,
-  }
+export default function CopyButton({
+  children,
+  confirmationLabel,
+  failureLabel,
+  temporaryLabelTimeout,
+  text,
+}) {
+  const [copyState, setCopyState] = useState(null);
 
-  get label() {
-    const { children, confirmationLabel, failureLabel } = this.props;
-    const { copyState } = this.state;
-
+  const label = useMemo(() => {
     if (copyState === null) {
       return children;
     }
 
     return copyState ? confirmationLabel : failureLabel;
-  }
+  });
 
-  onClick = async () => {
-    const { temporaryLabelTimeout, text } = this.props;
-
-    const reset = () => setTimeout(() => this.setState({ copyState: null }), temporaryLabelTimeout);
+  async function onClick() {
+    const reset = () => setTimeout(() => setCopyState(null), temporaryLabelTimeout);
 
     try {
       await copy(text);
-      this.setState({ copyState: true }, reset);
+      setCopyState(true);
     } catch (error) {
-      this.setState({ copyState: false }, reset);
+      setCopyState(false);
+    } finally {
+      reset();
     }
   }
 
-  render() {
-    const { label } = this;
-    const { copyState } = this.state;
-
-    return (
-      <button
-        type="button"
-        onClick={this.onClick}
-        disabled={copyState === true}
-      >
-        {label}
-      </button>
-    );
-  }
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={copyState === true}
+    >
+      {label}
+    </button>
+  );
 }
 
 CopyButton.defaultProps = {

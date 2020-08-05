@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import './Input.less';
@@ -17,61 +17,50 @@ const setRows = (el) => {
   el.rows = lines;
 };
 
-export default class Input extends Component {
-  componentDidMount() {
-    setRows(this.textarea);
+export default function Input({
+  id, label, onChange, value,
+}) {
+  const textarea = useRef();
+
+  useEffect(() => {
+    setRows(textarea.current);
+  }, [value]);
+
+  function onChangeInternal(event) {
+    const { value: nextValue } = event.target;
+
+    onChange(nextValue);
   }
 
-  componentDidUpdate(prevProps) {
-    const { value } = this.props;
-
-    if (value !== prevProps.value) {
-      setRows(this.textarea);
-    }
-  }
-
-  onChange = (event) => {
-    const { onChange } = this.props;
-    const { value } = event.target;
-
-    onChange(value);
-  }
-
-  onDnDChange = ([firstValue]) => {
-    const { onChange } = this.props;
-
+  function onDnDChange([firstValue]) {
     onChange(firstValue);
   }
 
-  render() {
-    const { id, label, value } = this.props;
+  return (
+    <DragAndDrop
+      acceptOnlyNFiles={1}
+      onChange={onDnDChange}
+    >
+      <div className="Input">
+        <h3>
+          <label htmlFor={id}>{label}</label>
+        </h3>
+        <textarea
+          id={id}
+          value={value}
+          onChange={onChangeInternal}
+          ref={(ref) => {
+            if (ref) {
+              setRows(ref);
+            }
 
-    return (
-      <DragAndDrop
-        acceptOnlyNFiles={1}
-        onChange={this.onDnDChange}
-      >
-        <div className="Input">
-          <h3>
-            <label htmlFor={id}>{label}</label>
-          </h3>
-          <textarea
-            id={id}
-            value={value}
-            onChange={this.onChange}
-            ref={(ref) => {
-              if (ref) {
-                setRows(ref);
-              }
-
-              this.textarea = ref;
-            }}
-            wrap="off"
-          />
-        </div>
-      </DragAndDrop>
-    );
-  }
+            textarea.current = ref;
+          }}
+          wrap="off"
+        />
+      </div>
+    </DragAndDrop>
+  );
 }
 
 Input.propTypes = {

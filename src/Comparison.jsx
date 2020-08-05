@@ -1,30 +1,18 @@
-import React, { lazy, Component, Suspense } from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { renderToStaticMarkup } from 'react-dom/server';
 
 import './Comparison.less';
 
-import CopyButton from './CopyButton';
-import Diff from './Diff';
-import FileIcon from './FileIcon';
-import SizeDiff from './SizeDiff';
+import Section, { isAssets } from './Comparison/Section';
+import Summary, { isData } from './Comparison/Summary';
+import TextSource from './Comparison/TextSource';
+import Preview from './Comparison/Preview';
 
 import {
   getStatProperties,
   getParsedAssetsTable,
 } from './utils/assets_table';
-import { parseSize } from './utils/units';
-
-const ReactMarkdown = lazy(() => new Promise((resolve, reject) => {
-  import('./react-markdown')
-    .then((result) => resolve(result.default ? result : { default: result }))
-    .catch(reject);
-}));
-
-const cutString = (str, max) => (str.length > max
-  ? `${str.slice(0, max / 2)}…${str.slice(str.length - max / 2, str.length)}`
-  : str
-);
 
 const unescape = (html) => {
   const el = document.createElement('textarea');
@@ -32,33 +20,46 @@ const unescape = (html) => {
   return el.value;
 };
 
-const unescapeMd = (md) => md.replace(/\\([[\]])/g, '$1');
+function renderSource({ diffData, leftData, rightData }) {
+  const { newAssets, removedAssets, changedAssets } = diffData;
 
-export default class Comparison extends Component {
-  static getDerivedStateFromProps(nextProps) {
-    const { left, right } = nextProps;
+  return (
+    <>
+      <Section assets={newAssets} title="✨ New assets" />
+      <Section assets={removedAssets} title="🗑️ Removed assets" />
+      <Section assets={changedAssets} title="✏️ Changed assets" />
+      <Summary leftData={leftData} rightData={rightData} />
+    </>
+  );
+}
 
-    const leftData = left && {
-      assets: getParsedAssetsTable(left),
-      stats: getStatProperties(left),
-    };
+renderSource.propTypes = {
+  diffData: PropTypes.shape({
+    newAssets: isAssets,
+    removedAssets: isAssets,
+    changedAssets: isAssets,
+  }),
+  leftData: isData,
+  rightData: isData,
+};
 
-    const rightData = right && {
-      assets: getParsedAssetsTable(right),
-      stats: getStatProperties(right),
-    };
+function getTextSource({ diffData, leftData, rightData }) {
+  const source = renderSource({ diffData, leftData, rightData });
+  return unescape(renderToStaticMarkup(source));
+}
 
-    return {
-      leftData,
-      rightData,
-    };
-  }
+export default function Comparison({ left, right }) {
+  const leftData = useMemo(() => left && ({
+    assets: getParsedAssetsTable(left),
+    stats: getStatProperties(left),
+  }), [left]);
 
-  state = {};
+  const rightData = useMemo(() => right && ({
+    assets: getParsedAssetsTable(right),
+    stats: getStatProperties(right),
+  }), [right]);
 
-  get diffData() {
-    const { leftData, rightData } = this.state;
-
+  const diffData = useMemo(() => {
     if (!leftData || !rightData) {
       return {};
     }
@@ -96,188 +97,20 @@ export default class Comparison extends Component {
       removedAssets,
       changedAssets,
     };
-  }
+  }, [leftData, rightData]);
 
-  // eslint-disable-next-line
-  renderAsset(asset) {
-    if (!asset.Asset || !asset.Size) {
-      // eslint-disable-next-line
-      console.warn('Invalid asset:', asset);
-      return null;
-    }
+  const textSource = getTextSource({ diffData, leftData, rightData });
 
-    const filename = (() => {
-      const isMap = asset.Asset.endsWith('.map');
-
-      const shortenedFilename = cutString(asset.Asset, 80).replace(/~/g, '&shy;&#126;').replace(/_/g, '&shy;&#95;');
-      const wrappedShortenedFilename = `<span title="${unescapeMd(asset.Asset)}">${shortenedFilename}</span>`;
-
-      if (isMap) {
-        return wrappedShortenedFilename;
-      }
-
-      return `**${wrappedShortenedFilename}**`;
-    })();
-
-    return (
-      <>
-        |
-        {' '}
-        <FileIcon filename={asset.Asset} />
-        {' '}
-        {filename}
-        {' '}
-        |
-        {' '}
-        {<SizeDiff
-          a={asset.Size}
-          b={asset.newSize}
-        /> || asset.Size}
-        {' '}
-        |
-        {'\n'}
-      </>
-    );
-  }
-
-  // eslint-disable-next-line
-  renderSection(title, assets) {
-    if (!assets || !assets.length) {
-      return null;
-    }
-
-    const sortedAssets = assets.sort((a, b) => a.Asset.localeCompare(b.Asset));
-
-    return (
-      <>
-        ##
-        {' '}
-        {title}
-        {'\n'}
-        | Asset | Size |
-        {'\n'}
-        | ----- | ---- |
-        {'\n'}
-        {sortedAssets.map(this.renderAsset)}
-        {'\n'}
-      </>
-    );
-  }
-
-  renderSummary() {
-    const { leftData, rightData } = this.state;
-
-    if (!leftData || !rightData) {
-      return null;
-    }
-
-    const { assets: leftAssets } = leftData;
-    const { assets: rightAssets } = rightData;
-
-    const sumSizes = (sum, asset) => sum + parseSize(asset.Size);
-    const onlyMaps = (asset) => asset.Asset.endsWith('.map');
-    const excludeMaps = (asset) => !onlyMaps(asset);
-
-    const mapsPresent = leftAssets.some(onlyMaps) || rightAssets.some(onlyMaps);
-
-    const size = leftAssets.reduce(sumSizes, 0);
-    const newSize = rightAssets.reduce(sumSizes, 0);
-
-    const sizeNoMap = leftAssets.filter(excludeMaps).reduce(sumSizes, 0);
-    const newSizeNoMap = rightAssets.filter(excludeMaps).reduce(sumSizes, 0);
-
-    const { Time: time } = leftData.stats;
-    const { Time: newTime } = rightData.stats;
-
-    return (
-      <>
-        ## Summary
-        {'\n'}
-        **Total size**:
-        {' '}
-        <SizeDiff
-          a={size}
-          b={newSize}
-        />
-        {'\n'}
-        {'\n'}
-        {mapsPresent && (
-          <>
-            **Total size excl. source maps**:
-            {' '}
-            <SizeDiff
-              a={sizeNoMap}
-              b={newSizeNoMap}
-            />
-            {'\n'}
-            {'\n'}
-          </>
-        )}
-        **Time**:
-        {' '}
-        <Diff
-          a={time}
-          b={newTime}
-          unit="ms"
-        />
-      </>
-    );
-  }
-
-  renderSource() {
-    const { newAssets, removedAssets, changedAssets } = this.diffData;
-
-    return (
-      <>
-        {this.renderSection('✨ New assets', newAssets)}
-        {this.renderSection('🗑️ Removed assets', removedAssets)}
-        {this.renderSection('✏️ Changed assets', changedAssets)}
-        {this.renderSummary()}
-      </>
-    );
-  }
-
-  getTextSource() {
-    const source = this.renderSource();
-    return unescape(renderToStaticMarkup(source));
-  }
-
-  render() {
-    const textSource = this.getTextSource();
-
-    return (
-      <section className="Comparison">
-        <div>
-          <h2>Comparison</h2>
-          <p>Copy &amp; paste this to Pull Request description.</p>
-        </div>
-        <div className="Comparison__source">
-          <h3>Source</h3>
-          <CopyButton text={textSource}>
-            Copy source
-          </CopyButton>
-          <textarea
-            onFocus={(event) => {
-              event.target.select();
-            }}
-            value={textSource}
-          />
-        </div>
-        <div className="Comparison__preview">
-          <h3>Preview</h3>
-          <div className="Comparison__preview__body">
-            <Suspense fallback={<p>Loading preview...</p>}>
-              <ReactMarkdown
-                // Have to change &shy; into <wbr /> as React-Markdown has issues rendering these
-                source={textSource.replace(/&shy;/g, '<wbr />')}
-                escapeHtml={false}
-              />
-            </Suspense>
-          </div>
-        </div>
-      </section>
-    );
-  }
+  return (
+    <section className="Comparison">
+      <div>
+        <h2>Comparison</h2>
+        <p>Copy &amp; paste this to Pull Request description.</p>
+      </div>
+      <TextSource textSource={textSource} />
+      <Preview textSource={textSource} />
+    </section>
+  );
 }
 
 Comparison.propTypes = {
