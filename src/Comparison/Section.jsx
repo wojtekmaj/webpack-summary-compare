@@ -20,7 +20,10 @@ export default function Section({ assets, title }) {
       {'\n'}
       | ----- | ---- |
       {'\n'}
-      {sortedAssets.map((asset) => (<Asset asset={asset} />))}
+      {sortedAssets.map((asset, index) => (
+        // eslint-disable-next-line react/no-array-index-key
+        <Asset key={index} asset={asset} />
+      ))}
       {'\n'}
     </>
   );

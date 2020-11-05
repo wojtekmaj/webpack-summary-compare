@@ -64,8 +64,15 @@ export default function Summary({ leftData, rightData }) {
   );
 }
 
+const isAssets = PropTypes.shape({});
+
+const isStats = PropTypes.shape({
+  Time: PropTypes.string,
+});
+
 export const isData = PropTypes.shape({
-  assets: PropTypes.array,
+  assets: PropTypes.arrayOf(isAssets),
+  stats: isStats,
 });
 
 Summary.propTypes = {

@@ -48,7 +48,7 @@ export default function CopyButton({
     }
 
     return copyState ? confirmationLabel : failureLabel;
-  });
+  }, [children, copyState, confirmationLabel, failureLabel]);
 
   async function onClick() {
     const reset = () => setTimeout(() => setCopyState(null), temporaryLabelTimeout);
