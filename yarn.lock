@@ -3826,7 +3826,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^7.2.0":
+"eslint@npm:^7.12.0":
   version: 7.12.1
   resolution: "eslint@npm:7.12.1"
   dependencies:
@@ -9226,7 +9226,7 @@ fsevents@~2.1.2:
     "@pmmmwh/react-refresh-webpack-plugin": ^0.4.1
     babel-loader: ^8.1.0
     css-loader: ^5.0.0
-    eslint: ^7.2.0
+    eslint: ^7.12.0
     eslint-config-wojtekmaj: ^0.4.0
     html-webpack-plugin: ^4.5.0
     less: ^3.12.0
