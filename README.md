@@ -1,3 +1,5 @@
+[![CI](https://github.com/wojtekmaj/webpack-summary-compare/workflows/CI/badge.svg)](https://github.com/wojtekmaj/webpack-summary-compare/actions)
+
 # webpack-summary-compare
 
 Generates a summary of differences between two Webpack summaries. Can come in handy when we'd like to give a quick summary of the impact of our changes in Pull Request description.
