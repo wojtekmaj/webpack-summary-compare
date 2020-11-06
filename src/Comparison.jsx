@@ -35,9 +35,9 @@ function renderSource({ diffData, leftData, rightData }) {
 
 renderSource.propTypes = {
   diffData: PropTypes.shape({
+    changedAssets: isAssets,
     newAssets: isAssets,
     removedAssets: isAssets,
-    changedAssets: isAssets,
   }),
   leftData: isData,
   rightData: isData,

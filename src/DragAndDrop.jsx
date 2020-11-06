@@ -98,7 +98,7 @@ export default function DragAndDrop({ acceptOnlyNFiles, children, onChange }) {
 }
 
 DragAndDrop.propTypes = {
+  acceptOnlyNFiles: PropTypes.number,
   children: PropTypes.node,
   onChange: PropTypes.func,
-  acceptOnlyNFiles: PropTypes.number,
 };
