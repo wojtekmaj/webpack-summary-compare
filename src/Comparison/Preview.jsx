@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from 'react';
+import { lazy, Suspense } from 'react';
 import PropTypes from 'prop-types';
 
 const ReactMarkdown = lazy(() => new Promise((resolve, reject) => {
