@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import './Preview.less';
 
 const ReactMarkdown = lazy(() => new Promise((resolve, reject) => {
-  import('../react-markdown')
+  import(/* webpackChunkName: "react-markdown" */ 'react-markdown/with-html')
     .then((result) => resolve(result.default ? result : { default: result }))
     .catch(reject);
 }));
