@@ -1,10 +1,12 @@
 import PropTypes from 'prop-types';
 
+import './TextSource.less';
+
 import CopyButton from '../CopyButton';
 
 export default function TextSource({ textSource }) {
   return (
-    <div className="Comparison__source">
+    <div className="TextSource">
       <h3>Source</h3>
       <CopyButton text={textSource}>
         Copy source

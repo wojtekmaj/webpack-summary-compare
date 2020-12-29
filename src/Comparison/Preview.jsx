@@ -1,6 +1,8 @@
 import { lazy, Suspense } from 'react';
 import PropTypes from 'prop-types';
 
+import './Preview.less';
+
 const ReactMarkdown = lazy(() => new Promise((resolve, reject) => {
   import('../react-markdown')
     .then((result) => resolve(result.default ? result : { default: result }))
@@ -9,9 +11,9 @@ const ReactMarkdown = lazy(() => new Promise((resolve, reject) => {
 
 export default function Preview({ textSource }) {
   return (
-    <div className="Comparison__preview">
+    <div className="Preview">
       <h3>Preview</h3>
-      <div className="Comparison__preview__body">
+      <div className="Preview__body">
         <Suspense fallback={<p>Loading preview...</p>}>
           <ReactMarkdown
             // Have to change &shy; into <wbr /> as React-Markdown has issues rendering these

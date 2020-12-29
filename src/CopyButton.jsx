@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 
+import './CopyButton.less';
+
 function fallbackCopy(text) {
   const textArea = document.createElement('textarea');
   textArea.value = text;
@@ -65,6 +67,7 @@ export default function CopyButton({
 
   return (
     <button
+      className="CopyButton"
       type="button"
       onClick={onClick}
       disabled={copyState === true}
