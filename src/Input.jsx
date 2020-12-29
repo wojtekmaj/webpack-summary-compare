@@ -1,31 +1,12 @@
-import { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import './Input.less';
 
 import DragAndDrop from './DragAndDrop';
 
-const setRows = (el) => {
-  if (!el) {
-    return;
-  }
-
-  const { value } = el;
-  const lines = value.split('\n').length;
-
-  // eslint-disable-next-line
-  el.rows = lines;
-};
-
 export default function Input({
   id, label, onChange, value,
 }) {
-  const textarea = useRef();
-
-  useEffect(() => {
-    setRows(textarea.current);
-  }, [value]);
-
   function onChangeInternal(event) {
     const { value: nextValue } = event.target;
 
@@ -49,13 +30,7 @@ export default function Input({
           id={id}
           value={value}
           onChange={onChangeInternal}
-          ref={(ref) => {
-            if (ref) {
-              setRows(ref);
-            }
-
-            textarea.current = ref;
-          }}
+          rows={value.split('\n').length}
           wrap="off"
         />
       </div>
