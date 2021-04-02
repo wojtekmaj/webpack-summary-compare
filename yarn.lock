@@ -3551,14 +3551,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"enhanced-resolve@npm:^4.3.0":
-  version: 4.3.0
-  resolution: "enhanced-resolve@npm:4.3.0"
+"enhanced-resolve@npm:^4.5.0":
+  version: 4.5.0
+  resolution: "enhanced-resolve@npm:4.5.0"
   dependencies:
     graceful-fs: ^4.1.2
     memory-fs: ^0.5.0
     tapable: ^1.0.0
-  checksum: aecdc0b2085990d84682c2ef829d0df3fe52511ac6353b2210ff138892fa36e524e117e1a534e0d5e51853cb1a9cce8941a68c81ed51a4989d2b041739aab65b
+  checksum: 72e679343f3ca6f2f84b1259460705fa29d46f0b806fa562db96edeb7826357a97ba9ccb61a07cdb05f51c1b4d2f5b544a2e4a6c257d7395a0c9b6e727f86d08
   languageName: node
   linkType: hard
 
@@ -9414,8 +9414,8 @@ fsevents@~2.1.2:
   linkType: soft
 
 "webpack@npm:^4.44.0":
-  version: 4.44.2
-  resolution: "webpack@npm:4.44.2"
+  version: 4.46.0
+  resolution: "webpack@npm:4.46.0"
   dependencies:
     "@webassemblyjs/ast": 1.9.0
     "@webassemblyjs/helper-module-context": 1.9.0
@@ -9425,7 +9425,7 @@ fsevents@~2.1.2:
     ajv: ^6.10.2
     ajv-keywords: ^3.4.1
     chrome-trace-event: ^1.0.2
-    enhanced-resolve: ^4.3.0
+    enhanced-resolve: ^4.5.0
     eslint-scope: ^4.0.3
     json-parse-better-errors: ^1.0.2
     loader-runner: ^2.4.0
@@ -9447,7 +9447,7 @@ fsevents@~2.1.2:
       optional: true
   bin:
     webpack: bin/webpack.js
-  checksum: cb4a9051d64df00494d18afd379d26669b96309f3f41e89e55b8531d99d67060bf8b262a996dbcdc2cda99adfb6c1c2bd9966630d329b09f9f9aa9fc732a3259
+  checksum: 1e3bc97c01c19e96946be044cd9e323a476844b147c270185f7224bc8e0eda91946defbc120cb262f14e517e4c3071c6c90097e1a8b71a6a7afcacf37992763f
   languageName: node
   linkType: hard
 
@@ -9582,9 +9582,9 @@ fsevents@~2.1.2:
   linkType: hard
 
 "y18n@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "y18n@npm:4.0.0"
-  checksum: 5b7434c95d31ffa2b9b97df98e2d786446a0ff21c30e0265088caa4818a3335559a425763e55b6d9370d9fcecb75a36ae5bb901184676bd255f96ee3c743f667
+  version: 4.0.1
+  resolution: "y18n@npm:4.0.1"
+  checksum: e589620d8d668d696e74730a83731a36a8d782c50379386b142e5b8287388a6ebaf28528e84201c68c206629faed71362c79b201b398eb0c69aa1737635678dd
   languageName: node
   linkType: hard
 
