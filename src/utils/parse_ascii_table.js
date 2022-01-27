@@ -1,15 +1,18 @@
 const getLines = (value) => value.split('\n').filter(Boolean);
 
-const sliceLineIntoValues = (line, tableColumnsEnds) => tableColumnsEnds
-  .map((el, index, arr) => line.slice(el, arr[index + 1] || line.length).trim());
+const sliceLineIntoValues = (line, tableColumnsEnds) =>
+  tableColumnsEnds.map((el, index, arr) => line.slice(el, arr[index + 1] || line.length).trim());
 
 const parseLine = (line, { columnNames, tableColumnsEnds }) => {
   const chunkValues = sliceLineIntoValues(line, tableColumnsEnds);
 
-  return columnNames.reduce((obj, column, index) => ({
-    ...obj,
-    [column]: chunkValues[index],
-  }), {});
+  return columnNames.reduce(
+    (obj, column, index) => ({
+      ...obj,
+      [column]: chunkValues[index],
+    }),
+    {},
+  );
 };
 
 const getAllColumnsEnds = (lines) => {
@@ -28,8 +31,9 @@ const getAllColumnsEnds = (lines) => {
 };
 
 const getTableColumnNames = (headerLine, tableColumnsEnds) => {
-  const columnNames = sliceLineIntoValues(headerLine, tableColumnsEnds)
-    .map((el, index) => el || `__UNNAMED__${index}`);
+  const columnNames = sliceLineIntoValues(headerLine, tableColumnsEnds).map(
+    (el, index) => el || `__UNNAMED__${index}`,
+  );
 
   return columnNames;
 };

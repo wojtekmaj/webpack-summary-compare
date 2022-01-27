@@ -11,14 +11,8 @@ export default function Section({ assets, title }) {
 
   return (
     <>
-      ##
-      {' '}
-      {title}
-      {'\n'}
-      | Asset | Size |
-      {'\n'}
-      | ----- | ---- |
-      {'\n'}
+      ## {title}
+      {'\n'}| Asset | Size |{'\n'}| ----- | ---- |{'\n'}
       {sortedAssets.map((asset, index) => (
         // eslint-disable-next-line react/no-array-index-key
         <Asset key={index} asset={asset} />

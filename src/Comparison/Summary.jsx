@@ -32,33 +32,17 @@ export default function Summary({ leftData, rightData }) {
     <>
       ## Summary
       {'\n'}
-      **Total size**:
-      {' '}
-      <SizeDiff
-        a={size}
-        b={newSize}
-      />
+      **Total size**: <SizeDiff a={size} b={newSize} />
       {'\n'}
       {'\n'}
       {mapsPresent && (
         <>
-          **Total size excl. source maps**:
-          {' '}
-          <SizeDiff
-            a={sizeNoMap}
-            b={newSizeNoMap}
-          />
+          **Total size excl. source maps**: <SizeDiff a={sizeNoMap} b={newSizeNoMap} />
           {'\n'}
           {'\n'}
         </>
       )}
-      **Time**:
-      {' '}
-      <Diff
-        a={time}
-        b={newTime}
-        unit="ms"
-      />
+      **Time**: <Diff a={time} b={newTime} unit="ms" />
     </>
   );
 }

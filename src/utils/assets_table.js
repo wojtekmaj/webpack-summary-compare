@@ -16,7 +16,9 @@ const getAssetsTable = (value) => {
   let tableEndLineIndex = -1;
   // No "Entrypoint" output included
   if (tableEndLineIndex === -1) {
-    tableEndLineIndex = linesStartingFromTableContent.findIndex((line) => !['KiB', 'MiB', 'bytes'].some((el) => line.includes(`${el}  `)));
+    tableEndLineIndex = linesStartingFromTableContent.findIndex(
+      (line) => !['KiB', 'MiB', 'bytes'].some((el) => line.includes(`${el}  `)),
+    );
   }
   // No lines after assets table
   if (tableEndLineIndex === -1) {
@@ -90,8 +92,11 @@ export const getParsedAssetsTable = (value) => {
   return parsedAssetsTable.map((asset) => formatAsset(asset, hash));
 };
 
-export const getStatProperties = (value) => ['Hash', 'Version', 'Time', 'Built at']
-  .reduce((result, key) => ({
-    ...result,
-    [key]: getStatProperty(value, key),
-  }), {});
+export const getStatProperties = (value) =>
+  ['Hash', 'Version', 'Time', 'Built at'].reduce(
+    (result, key) => ({
+      ...result,
+      [key]: getStatProperty(value, key),
+    }),
+    {},
+  );

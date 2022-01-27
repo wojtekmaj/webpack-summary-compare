@@ -3,13 +3,7 @@ function defaultFormat(value) {
   return roundedValue;
 }
 
-export default function Diff({
-  unit,
-  format = defaultFormat,
-  parse = parseFloat,
-  a,
-  b,
-}) {
+export default function Diff({ unit, format = defaultFormat, parse = parseFloat, a, b }) {
   function formatWithUnit(value) {
     return format(value) + (unit ? `&nbsp;${unit}` : '');
   }
@@ -23,7 +17,7 @@ export default function Diff({
   const parsedB = parse(b);
 
   const diff = parsedB - parsedA;
-  const diffPercent = ((parsedB / parsedA) * 100) - 100;
+  const diffPercent = (parsedB / parsedA) * 100 - 100;
 
   if (!diff) {
     return formatWithUnit(parsedA);
@@ -31,15 +25,7 @@ export default function Diff({
 
   const risen = diff > 0;
 
-  return `${
-    formatWithUnit(parsedA)
-  } → ${
-    formatWithUnit(parsedB)
-  } (${
-    formatWithUnit(diff)
-  }; ${
-    diffPercent.toFixed(2)
-  }% ${
-    risen ? '↗' : '↘'
-  })`;
+  return `${formatWithUnit(parsedA)} → ${formatWithUnit(parsedB)} (${formatWithUnit(
+    diff,
+  )}; ${diffPercent.toFixed(2)}% ${risen ? '↗' : '↘'})`;
 }

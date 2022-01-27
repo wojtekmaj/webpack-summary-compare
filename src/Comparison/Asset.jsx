@@ -4,10 +4,9 @@ import FileIcon from '../FileIcon';
 import SizeDiff from '../SizeDiff';
 
 function cutString(str, max) {
-  return (str.length > max
+  return str.length > max
     ? `${str.slice(0, max / 2)}…${str.slice(str.length - max / 2, str.length)}`
-    : str
-  );
+    : str;
 }
 
 function unescapeMd(md) {
@@ -17,15 +16,19 @@ function unescapeMd(md) {
 export default function Asset({ asset }) {
   if (!asset.Asset || !asset.Size) {
     // eslint-disable-next-line
-      console.warn('Invalid asset:', asset);
+    console.warn('Invalid asset:', asset);
     return null;
   }
 
   const filename = (() => {
     const isMap = asset.Asset.endsWith('.map');
 
-    const shortenedFilename = cutString(asset.Asset, 80).replace(/~/g, '&shy;&#126;').replace(/_/g, '&shy;&#95;');
-    const wrappedShortenedFilename = `<span title="${unescapeMd(asset.Asset)}">${shortenedFilename}</span>`;
+    const shortenedFilename = cutString(asset.Asset, 80)
+      .replace(/~/g, '&shy;&#126;')
+      .replace(/_/g, '&shy;&#95;');
+    const wrappedShortenedFilename = `<span title="${unescapeMd(
+      asset.Asset,
+    )}">${shortenedFilename}</span>`;
 
     if (isMap) {
       return wrappedShortenedFilename;
@@ -36,21 +39,8 @@ export default function Asset({ asset }) {
 
   return (
     <>
-      |
-      {' '}
-      <FileIcon filename={asset.Asset} />
-      {' '}
-      {filename}
-      {' '}
-      |
-      {' '}
-      {<SizeDiff
-        a={asset.Size}
-        b={asset.newSize}
-      /> || asset.Size}
-      {' '}
-      |
-      {'\n'}
+      | <FileIcon filename={asset.Asset} /> {filename} |{' '}
+      {<SizeDiff a={asset.Size} b={asset.newSize} /> || asset.Size} |{'\n'}
     </>
   );
 }
