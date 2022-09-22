@@ -7,8 +7,9 @@
     "clean": "rimraf dist",
     "dev": "NODE_ENV=development webpack serve",
     "lint": "eslint src/ --ext .jsx,.js",
+    "prettier": "prettier --check .",
     "postinstall": "husky install",
-    "test": "yarn lint"
+    "test": "yarn lint && yarn prettier"
   },
   "author": {
     "name": "Wojciech Maj",
