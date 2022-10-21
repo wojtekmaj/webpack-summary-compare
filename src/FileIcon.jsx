@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 const FileIcon = ({ filename }) => {
   if (!filename.includes('.')) {
     return null;
@@ -10,6 +12,10 @@ const FileIcon = ({ filename }) => {
   }
 
   return '📄';
+};
+
+FileIcon.propTypes = {
+  filename: PropTypes.string.isRequired,
 };
 
 export default FileIcon;
